@@ -12,6 +12,16 @@ import com.samarth.aifinancecoach.presentation.auth.onboarding.OnboardingScreen
 import com.samarth.aifinancecoach.presentation.auth.profile.ProfileSetupScreen
 import com.samarth.aifinancecoach.presentation.auth.signup.SignUpScreen
 import com.samarth.aifinancecoach.presentation.dashboard.DashboardScreen
+import com.samarth.aifinancecoach.presentation.transaction.add.AddTransactionScreen
+import com.samarth.aifinancecoach.presentation.transaction.detail.TransactionDetailScreen
+import com.samarth.aifinancecoach.presentation.transaction.list.TransactionListScreen
+import com.samarth.aifinancecoach.presentation.transaction.recurring.RecurringScreen
+import com.samarth.aifinancecoach.presentation.main.MainScreen
+import com.samarth.aifinancecoach.presentation.budget.tracking.BudgetTrackingScreen
+import com.samarth.aifinancecoach.presentation.budget.setup.BudgetSetupScreen
+import com.samarth.aifinancecoach.presentation.ai.AiCoachScreen
+import com.samarth.aifinancecoach.presentation.ai.insights.AiInsightsScreen
+import com.samarth.aifinancecoach.presentation.ai.report.AiReportScreen
 
 @Composable
 fun AppNavGraph(
@@ -40,14 +50,14 @@ fun AppNavGraph(
             ProfileSetupScreen(navController = navController)
         }
 
-        // ─── Dashboard ────────────────────────────────────────────
+        // ─── Main / Dashboard (Container for Pager) ───────────────
         composable(Screen.Dashboard.route) {
-            DashboardScreen(navController = navController)
+            MainScreen(navController = navController)
         }
 
         // ─── Transactions ─────────────────────────────────────────
         composable(Screen.TransactionList.route) {
-            // TransactionListScreen(navController = navController)
+            TransactionListScreen(navController = navController)
         }
 
         composable(
@@ -58,8 +68,9 @@ fun AppNavGraph(
                     defaultValue = -1L
                 }
             )
-        ) {
-            // AddTransactionScreen(navController = navController)
+        ) { backStackEntry ->
+            val transactionId = backStackEntry.arguments?.getLong(Screen.AddTransaction.ARG_TRANSACTION_ID)
+            AddTransactionScreen(navController = navController, transactionId = transactionId)
         }
 
         composable(
@@ -69,34 +80,48 @@ fun AppNavGraph(
                     type = NavType.LongType
                 }
             )
-        ) {
-            // TransactionDetailScreen(navController = navController)
+        ) { backStackEntry ->
+            val transactionId = backStackEntry.arguments?.getLong(Screen.TransactionDetail.ARG_TRANSACTION_ID) ?: return@composable
+            TransactionDetailScreen(navController = navController, transactionId = transactionId)
         }
 
         composable(Screen.RecurringTransactions.route) {
-            // RecurringTransactionsScreen(navController = navController)
+            RecurringScreen(navController = navController)
         }
 
         // ─── Budget ───────────────────────────────────────────────────
-        composable(Screen.BudgetSetup.route) {
-            // BudgetSetupScreen(navController = navController)
+        composable(
+            route = Screen.BudgetSetup.route,
+            arguments = listOf(
+                navArgument(Screen.BudgetSetup.ARG_BUDGET_ID) {
+                    type = NavType.LongType
+                    defaultValue = -1L
+                },
+                navArgument(Screen.BudgetSetup.ARG_CATEGORY) {
+                    type = NavType.StringType
+                    nullable = true
+                    defaultValue = null
+                }
+            )
+        ) {
+            BudgetSetupScreen(navController = navController)
         }
 
         composable(Screen.BudgetTracking.route) {
-            // BudgetTrackingScreen(navController = navController)
+            BudgetTrackingScreen(navController = navController)
         }
 
         // ─── AI ───────────────────────────────────────────────────
         composable(Screen.AiChat.route) {
-            // AiChatScreen(navController = navController)
+            AiCoachScreen()
         }
 
         composable(Screen.AiInsights.route) {
-            // AiInsightsScreen(navController = navController)
+            AiInsightsScreen(onBackClick = { navController.popBackStack() })
         }
 
         composable(Screen.AiReport.route) {
-            // AiReportScreen(navController = navController)
+            AiReportScreen()
         }
 
         // ─── Analytics ────────────────────────────────────────────
@@ -104,7 +129,11 @@ fun AppNavGraph(
             // AnalyticsScreen(navController = navController)
         }
 
-        // ─── Settings ─────────────────────────────────────────────
+        // ─── Settings / Profile ────────────────────────────────────────
+        composable(Screen.Profile.route) {
+             // ProfileScreen(navController = navController)
+        }
+
         composable(Screen.Settings.route) {
             // SettingsScreen(navController = navController)
         }

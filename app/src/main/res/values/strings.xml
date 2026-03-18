@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">AiFinanaceCoach</string>
+    <string name="app_name">FinSense</string>
 
     <!-- Onboarding -->
     <string name="onboarding_skip">Skip</string>
@@ -76,4 +76,147 @@
     <string name="dashboard_add_transaction">Add Transaction</string>
     <string name="dashboard_month_income">₹%1$s</string>
     <string name="dashboard_month_expense">₹%1$s</string>
+
+    <!-- Transaction List -->
+    <string name="transactions_title">Transactions</string>
+    <string name="transactions_search_hint">Search transactions…</string>
+    <string name="transactions_filter_all">All</string>
+    <string name="transactions_filter_income">Income</string>
+    <string name="transactions_filter_expense">Expense</string>
+    <string name="transactions_empty_title">No transactions yet</string>
+    <string name="transactions_empty_desc">Tap the + button to add\nyour first transaction</string>
+    <string name="transactions_total_income">Total Income</string>
+    <string name="transactions_total_expense">Total Expense</string>
+    <string name="transactions_count">%1$d transactions</string>
+    <string name="transactions_section_today">Today</string>
+    <string name="transactions_section_yesterday">Yesterday</string>
+    <string name="transactions_section_this_week">This Week</string>
+    <string name="transactions_section_older">Older</string>
+    <string name="transactions_delete_confirm">Delete this transaction?</string>
+    <string name="transactions_delete_confirm_desc">This action cannot be undone.</string>
+    <string name="transactions_deleted">Transaction deleted</string>
+    <string name="transactions_undo">Undo</string>
+
+    <!-- Add / Edit Transaction -->
+    <string name="add_transaction_title">Add Transaction</string>
+    <string name="edit_transaction_title">Edit Transaction</string>
+    <string name="add_transaction_expense">Expense</string>
+    <string name="add_transaction_income">Income</string>
+    <string name="add_transaction_amount_hint">0.00</string>
+    <string name="add_transaction_amount_label">Amount</string>
+    <string name="add_transaction_category_label">Category</string>
+    <string name="add_transaction_account_label">Account</string>
+    <string name="add_transaction_note_label">Note (optional)</string>
+    <string name="add_transaction_note_hint">What was this for?</string>
+    <string name="add_transaction_date_label">Date</string>
+    <string name="add_transaction_recurring_label">Recurring Transaction</string>
+    <string name="add_transaction_recurring_interval">Repeat every</string>
+    <string name="add_transaction_save">Save Transaction</string>
+    <string name="add_transaction_update">Update Transaction</string>
+    <string name="add_transaction_error_amount">Please enter a valid amount</string>
+    <string name="add_transaction_error_category">Please select a category</string>
+    <string name="add_transaction_saved">Transaction saved successfully</string>
+
+    <!-- Transaction Detail -->
+    <string name="transaction_detail_title">Transaction Details</string>
+    <string name="transaction_detail_edit">Edit</string>
+    <string name="transaction_detail_delete">Delete</string>
+    <string name="transaction_detail_amount">Amount</string>
+    <string name="transaction_detail_category">Category</string>
+    <string name="transaction_detail_account">Account</string>
+    <string name="transaction_detail_date">Date</string>
+    <string name="transaction_detail_note">Note</string>
+    <string name="transaction_detail_type">Type</string>
+    <string name="transaction_detail_recurring">Recurring</string>
+
+    <!-- Recurring -->
+    <string name="recurring_title">Recurring Transactions</string>
+    <string name="recurring_empty">No recurring transactions set up</string>
+    <string name="recurring_next_due">Next due: %1$s</string>
+    <string name="recurring_interval_daily">Daily</string>
+    <string name="recurring_interval_weekly">Weekly</string>
+    <string name="recurring_interval_monthly">Monthly</string>
+
+    <!-- Budget Tracking -->
+    <string name="budget_title">Budget</string>
+    <string name="budget_month_overview">Month Overview</string>
+    <string name="budget_total_budgeted">Total Budgeted</string>
+    <string name="budget_total_spent">Total Spent</string>
+    <string name="budget_remaining">Remaining</string>
+    <string name="budget_overall_progress">Overall Progress</string>
+    <string name="budget_categories">Category Budgets</string>
+    <string name="budget_add_new">+ Add Budget</string>
+    <string name="budget_empty_title">No budgets set</string>
+    <string name="budget_empty_desc">Set spending limits for each category to stay on track</string>
+    <string name="budget_exceeded">Exceeded by ₹%1$s</string>
+    <string name="budget_remaining_amount">₹%1$s remaining</string>
+    <string name="budget_spent_of">₹%1$s of ₹%2$s</string>
+    <string name="budget_on_track">On track</string>
+    <string name="budget_near_limit">Near limit</string>
+    <string name="budget_exceeded_label">Exceeded</string>
+    <string name="budget_health_score">Budget Health Score</string>
+    <string name="budget_health_excellent">Excellent</string>
+    <string name="budget_health_good">Good</string>
+    <string name="budget_health_fair">Fair</string>
+    <string name="budget_health_poor">Poor</string>
+    <string name="budget_deleted">Budget deleted</string>
+    <string name="budget_undo">Undo</string>
+    <string name="budget_delete_confirm">Delete this budget?</string>
+
+    <!-- Budget Setup -->
+    <string name="budget_setup_title">Set Budget</string>
+    <string name="budget_setup_subtitle">Set a monthly spending limit for this category</string>
+    <string name="budget_setup_category_label">Category</string>
+    <string name="budget_setup_amount_label">Monthly Limit</string>
+    <string name="budget_setup_amount_hint">0.00</string>
+    <string name="budget_setup_save">Save Budget</string>
+    <string name="budget_setup_update">Update Budget</string>
+    <string name="budget_setup_error_amount">Please enter a valid amount</string>
+    <string name="budget_setup_error_category">Please select a category</string>
+    <string name="budget_setup_already_exists">A budget for %1$s already exists. It will be updated.</string>
+    <string name="budget_setup_ai_suggestion">AI Suggestion</string>
+    <string name="budget_setup_ai_based_on">Based on your last 3 months spending</string>
+    <string name="budget_saved">Budget saved successfully</string>
+
+    <!-- AI Chat -->
+    <string name="ai_chat_title">AI Coach</string>
+    <string name="ai_chat_input_hint">Ask about your finances…</string>
+    <string name="ai_chat_send">Send</string>
+    <string name="ai_chat_thinking">Analysing your finances…</string>
+    <string name="ai_chat_empty_title">Your AI Finance Coach</string>
+    <string name="ai_chat_empty_subtitle">Ask me anything about your money. I analyse your actual transactions to give you personalised advice.</string>
+    <string name="ai_chat_error">Something went wrong. Please try again.</string>
+    <string name="ai_chat_retry">Retry</string>
+    <string name="ai_chat_clear">Clear chat</string>
+    <string name="ai_chat_clear_confirm">Clear all chat history?</string>
+    <string name="ai_chat_clear_confirm_desc">This cannot be undone.</string>
+    <string name="ai_chat_copied">Message copied</string>
+    <string name="ai_chat_copy">Copy</string>
+
+    <!-- Quick prompts -->
+    <string name="ai_prompt_spending">Where did my money go this month?</string>
+    <string name="ai_prompt_savings">How can I save more this month?</string>
+    <string name="ai_prompt_budget">Am I on track with my budgets?</string>
+    <string name="ai_prompt_advice">Give me financial advice based on my spending</string>
+    <string name="ai_prompt_afford">Can I afford a big purchase this month?</string>
+    <string name="ai_prompt_compare">How does this month compare to last month?</string>
+
+    <!-- AI Insights -->
+    <string name="ai_insights_title">AI Insights</string>
+    <string name="ai_insights_subtitle">Personalised observations about your finances</string>
+    <string name="ai_insights_empty">No insights yet. Add some transactions first.</string>
+    <string name="ai_insights_generating">Generating insights from your data…</string>
+    <string name="ai_insights_refresh">Refresh Insights</string>
+    <string name="ai_insights_mark_read">Mark as read</string>
+
+    <!-- AI Report -->
+    <string name="ai_report_title">Monthly Report</string>
+    <string name="ai_report_subtitle">AI-generated summary of your finances</string>
+    <string name="ai_report_generating">Generating your monthly report…</string>
+    <string name="ai_report_share">Share Report</string>
+    <string name="ai_report_empty">No data available for this month yet.</string>
+    <string name="ai_report_financial_health">Financial Health</string>
+    <string name="ai_report_key_insights">Key Insights</string>
+    <string name="ai_report_recommendations">Recommendations</string>
+    <string name="ai_report_spending_breakdown">Spending Breakdown</string>
 </resources>

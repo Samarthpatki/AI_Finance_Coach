@@ -12,4 +12,7 @@ interface TransactionRepository {
     suspend fun deleteTransaction(id: Long)
     suspend fun getTotalIncomeForMonth(month: Int, year: Int): Double
     suspend fun getTotalExpenseForMonth(month: Int, year: Int): Double
+    suspend fun getTransactionById(id: Long): Transaction?
+    fun searchTransactions(query: String): Flow<List<Transaction>>
+    fun getRecurringTransactions(): Flow<List<Transaction>>
 }

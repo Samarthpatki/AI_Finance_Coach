@@ -16,8 +16,10 @@ object TransactionMapper {
             account = AccountType.valueOf(account),
             note = note,
             dateMillis = dateMillis,
+            month = month,
+            year = year,
             isRecurring = isRecurring,
-            recurringIntervalDays = recurringIntervalDays,
+            recurringIntervalDays = recurringIntervalDays ?: 30,
             tags = if (tags.isEmpty()) emptyList() else tags.split(",")
         )
     }
@@ -31,6 +33,8 @@ object TransactionMapper {
             account = account.name,
             note = note,
             dateMillis = dateMillis,
+            month = month,
+            year = year,
             isRecurring = isRecurring,
             recurringIntervalDays = recurringIntervalDays,
             tags = tags.joinToString(",")

@@ -2,6 +2,7 @@ package com.samarth.aifinancecoach.di
 
 import android.content.Context
 import androidx.room.Room
+import com.samarth.aifinancecoach.data.local.dao.AiMessageDao
 import com.samarth.aifinancecoach.data.local.dao.BudgetDao
 import com.samarth.aifinancecoach.data.local.dao.TransactionDao
 import com.samarth.aifinancecoach.data.local.database.AppDatabase
@@ -33,4 +34,7 @@ object DatabaseModule {
 
     @Provides
     fun provideBudgetDao(db: AppDatabase): BudgetDao = db.budgetDao()
+
+    @Provides
+    fun provideAiMessageDao(db: AppDatabase): AiMessageDao = db.aiMessageDao()
 }

@@ -21,14 +21,14 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
 
         // Must be called BEFORE super.onCreate()
-//        val splashScreen = installSplashScreen()
+        val splashScreen = installSplashScreen()
 
         super.onCreate(savedInstanceState)
 
         // Keep splash visible until auth state is determined
-//        splashScreen.setKeepOnScreenCondition {
-//            viewModel.isLoading.value
-//        }
+        splashScreen.setKeepOnScreenCondition {
+            viewModel.isLoading.value
+        }
 
         enableEdgeToEdge()
 

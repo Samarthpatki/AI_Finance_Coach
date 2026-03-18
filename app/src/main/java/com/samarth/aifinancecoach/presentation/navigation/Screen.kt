@@ -30,7 +30,20 @@ sealed class Screen(val route: String) {
     object RecurringTransactions : Screen("recurring_transactions")
 
     // ─── Budget ───────────────────────────────────────────────────
-    object BudgetSetup      : Screen("budget_setup")
+    object BudgetSetup : Screen(
+        "budget_setup?budgetId={budgetId}&category={category}"
+    ) {
+        fun createRoute(budgetId: Long? = null, category: String? = null): String {
+            var route = "budget_setup"
+            val params = mutableListOf<String>()
+            if (budgetId != null) params.add("budgetId=$budgetId")
+            if (category != null) params.add("category=$category")
+            if (params.isNotEmpty()) route += "?" + params.joinToString("&")
+            return route
+        }
+        const val ARG_BUDGET_ID = "budgetId"
+        const val ARG_CATEGORY = "category"
+    }
     object BudgetTracking   : Screen("budget_tracking")
 
     // ─── AI ───────────────────────────────────────────────────────

@@ -1,5 +1,6 @@
 package com.samarth.aifinancecoach.utils
 
+import com.samarth.aifinancecoach.domain.model.TransactionType
 import java.text.NumberFormat
 import java.util.Locale
 
@@ -7,9 +8,12 @@ object CurrencyFormatter {
     fun format(amount: Double, symbol: String = "₹"): String {
         val format = NumberFormat.getCurrencyInstance(Locale("en", "IN"))
         val formatted = format.format(amount)
-        // NumberFormat.getCurrencyInstance adds the currency symbol based on locale,
-        // but to be safe and use the provided symbol:
         return formatted.replace(format.currency?.symbol ?: "₹", symbol)
+    }
+
+    fun formatWithSign(amount: Double, type: TransactionType, symbol: String = "₹"): String {
+        val sign = if (type == TransactionType.INCOME) "+" else "-"
+        return "$sign${format(amount, symbol)}"
     }
 
     fun formatCompact(amount: Double, symbol: String = "₹"): String {

@@ -5,13 +5,16 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.rounded.List
-import androidx.compose.material.icons.rounded.*
+import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material.icons.rounded.Face
+import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -20,9 +23,9 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import androidx.navigation.compose.currentBackStackEntryAsState
 import com.samarth.aifinancecoach.R
 import com.samarth.aifinancecoach.domain.model.AiInsight
+import com.samarth.aifinancecoach.domain.model.Transaction
 import com.samarth.aifinancecoach.presentation.components.*
 import com.samarth.aifinancecoach.presentation.navigation.Screen
 import com.samarth.aifinancecoach.presentation.theme.AIFinanceCoachTheme
@@ -36,8 +39,6 @@ fun DashboardScreen(
     viewModel: DashboardViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentRoute = navBackStackEntry?.destination?.route
 
     LaunchedEffect(viewModel.navigationEvent) {
         viewModel.navigationEvent.collectLatest { route ->
@@ -47,13 +48,15 @@ fun DashboardScreen(
 
     DashboardContent(
         state = state,
-        currentRoute = currentRoute,
         onAddTransactionClick = viewModel::onAddTransactionClick,
         onBudgetClick = viewModel::onBudgetClick,
         onSeeAllTransactionsClick = viewModel::onSeeAllTransactionsClick,
         onInsightClick = viewModel::onInsightClick,
         onProfileClick = viewModel::onProfileClick,
-        onNavigate = { route -> navController.navigate(route) }
+        onTransactionClick = { transaction ->
+            navController.navigate(Screen.TransactionDetail.createRoute(transaction.id))
+        },
+        onDeleteTransaction = { /* Dashboard usually doesn't delete directly */ },
     )
 }
 
@@ -61,13 +64,14 @@ fun DashboardScreen(
 @Composable
 fun DashboardContent(
     state: DashboardState,
-    currentRoute: String?,
     onAddTransactionClick: () -> Unit,
     onBudgetClick: () -> Unit,
     onSeeAllTransactionsClick: () -> Unit,
     onInsightClick: (AiInsight) -> Unit,
     onProfileClick: () -> Unit,
-    onNavigate: (String) -> Unit
+    onTransactionClick: (Transaction) -> Unit,
+    onDeleteTransaction: (Transaction) -> Unit,
+
 ) {
     Scaffold(
         topBar = {
@@ -105,11 +109,12 @@ fun DashboardContent(
                 onClick = onAddTransactionClick,
                 shape = MaterialTheme.shapes.small,
                 containerColor = Color.Transparent,
-                elevation = FloatingActionButtonDefaults.elevation(0.dp)
+                elevation = FloatingActionButtonDefaults.elevation(5.dp)
             ) {
                 Box(
                     modifier = Modifier
                         .size(50.dp)
+                        .clip(RoundedCornerShape(10.dp))
                         .background(
                             Brush.horizontalGradient(
                                 listOf(Color(0xFF00C896), Color(0xFF0096FF))
@@ -123,65 +128,6 @@ fun DashboardContent(
                         tint = Color.White
                     )
                 }
-            }
-        },
-        bottomBar = {
-            NavigationBar(
-                containerColor = MaterialTheme.colorScheme.surface,
-                tonalElevation = 0.dp
-            ) {
-                NavigationBarItem(
-                    selected = currentRoute == Screen.Dashboard.route,
-                    onClick = { /* Already here */ },
-                    icon = { Icon(Icons.Rounded.Home, contentDescription = "Home") },
-                    label = { Text("Home", fontFamily = SoraFontFamily) },
-                    colors = NavigationBarItemDefaults.colors(
-                        selectedIconColor = MaterialTheme.colorScheme.primary,
-                        selectedTextColor = MaterialTheme.colorScheme.primary,
-                        unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                        unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                        indicatorColor = Color.Transparent
-                    )
-                )
-                NavigationBarItem(
-                    selected = currentRoute == Screen.TransactionList.route,
-                    onClick = { onNavigate(Screen.TransactionList.route) },
-                    icon = { Icon(Icons.AutoMirrored.Rounded.List, contentDescription = "Transactions") },
-                    label = { Text("Transactions", fontFamily = SoraFontFamily) },
-                    colors = NavigationBarItemDefaults.colors(
-                        selectedIconColor = MaterialTheme.colorScheme.primary,
-                        selectedTextColor = MaterialTheme.colorScheme.primary,
-                        unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                        unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                        indicatorColor = Color.Transparent
-                    )
-                )
-                NavigationBarItem(
-                    selected = currentRoute == Screen.BudgetTracking.route,
-                    onClick = { onNavigate(Screen.BudgetTracking.route) },
-                    icon = { Icon(Icons.Rounded.AccountBox, contentDescription = "Budget") },
-                    label = { Text("Budget", fontFamily = SoraFontFamily) },
-                    colors = NavigationBarItemDefaults.colors(
-                        selectedIconColor = MaterialTheme.colorScheme.primary,
-                        selectedTextColor = MaterialTheme.colorScheme.primary,
-                        unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                        unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                        indicatorColor = Color.Transparent
-                    )
-                )
-                NavigationBarItem(
-                    selected = currentRoute == Screen.AiChat.route,
-                    onClick = { onNavigate(Screen.AiChat.route) },
-                    icon = { Icon(Icons.Rounded.Face, contentDescription = "AI Coach") },
-                    label = { Text("AI Coach", fontFamily = SoraFontFamily) },
-                    colors = NavigationBarItemDefaults.colors(
-                        selectedIconColor = MaterialTheme.colorScheme.primary,
-                        selectedTextColor = MaterialTheme.colorScheme.primary,
-                        unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                        unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                        indicatorColor = Color.Transparent
-                    )
-                )
             }
         }
     ) { padding ->
@@ -249,7 +195,8 @@ fun DashboardContent(
             items(state.recentTransactions) { transaction ->
                 TransactionCard(
                     transaction = transaction,
-                    onClick = { /* Navigate to Detail */ }
+                    onClick = { onTransactionClick(transaction) },
+                    onDelete = { onDeleteTransaction(transaction) }
                 )
                 HorizontalDivider(color = MaterialTheme.colorScheme.outline.copy(alpha = 0.1f))
             }
@@ -313,13 +260,14 @@ fun DashboardPreview() {
                 totalIncome = 50000.0,
                 totalExpense = 20000.0
             ),
-            currentRoute = Screen.Dashboard.route,
             onAddTransactionClick = {},
             onBudgetClick = {},
             onSeeAllTransactionsClick = {},
             onInsightClick = {},
             onProfileClick = {},
-            onNavigate = {}
-        )
+            onTransactionClick = {},
+            onDeleteTransaction = {},
+
+         )
     }
 }

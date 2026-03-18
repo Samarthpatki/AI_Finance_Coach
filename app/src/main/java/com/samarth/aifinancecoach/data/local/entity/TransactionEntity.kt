@@ -12,6 +12,8 @@ data class TransactionEntity(
     val account: String,
     val note: String = "",
     val dateMillis: Long,
+    val month: Int,
+    val year: Int,
     val isRecurring: Boolean = false,
     val recurringIntervalDays: Int? = null,
     val tags: String = ""

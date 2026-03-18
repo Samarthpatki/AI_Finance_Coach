@@ -8,8 +8,10 @@ data class Transaction(
     val account: AccountType,
     val note: String = "",
     val dateMillis: Long = System.currentTimeMillis(),
+    val month: Int,
+    val year: Int,
     val isRecurring: Boolean = false,
-    val recurringIntervalDays: Int? = null,
+    val recurringIntervalDays: Int = 30,
     val tags: List<String> = emptyList()
 )
 
@@ -19,21 +21,4 @@ enum class TransactionType {
 
 enum class AccountType {
     CASH, UPI, BANK, CREDIT_CARD
-}
-
-enum class Category(val label: String, val emoji: String) {
-    FOOD("Food & Dining", "🍔"),
-    TRANSPORT("Transport", "🚗"),
-    SHOPPING("Shopping", "🛍️"),
-    BILLS("Bills & Utilities", "💡"),
-    EMI("EMI & Loans", "🏦"),
-    HEALTH("Health & Medical", "💊"),
-    ENTERTAINMENT("Entertainment", "🎬"),
-    INVESTMENT("Investment", "📈"),
-    SALARY("Salary", "💰"),
-    FREELANCE("Freelance", "💻"),
-    GROCERIES("Groceries", "🛒"),
-    EDUCATION("Education", "📚"),
-    TRAVEL("Travel", "✈️"),
-    OTHER("Other", "📦")
 }
