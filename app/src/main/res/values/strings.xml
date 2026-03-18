@@ -1,0 +1,79 @@
+<resources>
+    <string name="app_name">AiFinanaceCoach</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_skip">Skip</string>
+    <string name="onboarding_next">Next</string>
+    <string name="onboarding_get_started">Get Started</string>
+    <string name="onboarding_page1_title">Know Where Your\nMoney Goes</string>
+    <string name="onboarding_page1_desc">Track every rupee automatically. Get a clear picture of your spending habits in seconds.</string>
+    <string name="onboarding_page2_title">AI That Understands\nYour Finances</string>
+    <string name="onboarding_page2_desc">Ask anything about your money. Your personal AI coach analyzes your actual data, not generic advice.</string>
+    <string name="onboarding_page3_title">Budget Smarter,\nSave More</string>
+    <string name="onboarding_page3_desc">Set budgets that actually work. Get alerts before you overspend, not after.</string>
+
+    <!-- Login -->
+    <string name="login_welcome_back">Welcome Back</string>
+    <string name="login_subtitle">Sign in to continue to AI Finance Coach</string>
+    <string name="login_email_label">Email</string>
+    <string name="login_email_hint">Enter your email</string>
+    <string name="login_password_label">Password</string>
+    <string name="login_password_hint">Enter your password</string>
+    <string name="login_forgot_password">Forgot Password?</string>
+    <string name="login_continue">Login</string>
+    <string name="login_or">or</string>
+    <string name="login_with_google">Continue with Google</string>
+    <string name="login_terms">By continuing, you agree to our Terms of Service and Privacy Policy</string>
+    <string name="login_first_time">New user? </string>
+    <string name="login_signup">Sign up</string>
+    <string name="login_creating_account">Setting up your account…</string>
+
+    <!-- SignUp -->
+    <string name="signup_title">Create Account</string>
+    <string name="signup_subtitle">Sign up to start your financial journey</string>
+    <string name="signup_name_label">Full Name</string>
+    <string name="signup_name_hint">Enter your full name</string>
+    <string name="signup_email_label">Email</string>
+    <string name="signup_email_hint">Enter your email</string>
+    <string name="signup_password_label">Password</string>
+    <string name="signup_password_hint">Enter your password</string>
+    <string name="signup_confirm_password_label">Confirm Password</string>
+    <string name="signup_confirm_password_hint">Confirm your password</string>
+    <string name="signup_continue">Sign Up</string>
+    <string name="signup_with_google">Sign up with Google</string>
+    <string name="signup_already_have_account">Already have an account? </string>
+    <string name="signup_login">Login</string>
+
+    <!-- Profile Setup -->
+    <string name="profile_setup_title">Set Up Your Profile</string>
+    <string name="profile_setup_subtitle">Help us personalise your experience</string>
+    <string name="profile_name_label">Your Name</string>
+    <string name="profile_name_hint">Enter your name</string>
+    <string name="profile_income_label">Monthly Income</string>
+    <string name="profile_income_hint">Enter your monthly income</string>
+    <string name="profile_currency_label">Currency</string>
+    <string name="profile_continue">Continue</string>
+    <string name="profile_setup_step">Step %1$d of 2</string>
+    <string name="profile_error_name_empty">Please enter your name</string>
+    <string name="profile_error_income_invalid">Please enter a valid income amount</string>
+
+    <!-- Dashboard -->
+    <string name="dashboard_greeting_morning">Good Morning</string>
+    <string name="dashboard_greeting_afternoon">Good Afternoon</string>
+    <string name="dashboard_greeting_evening">Good Evening</string>
+    <string name="dashboard_this_month">This Month</string>
+    <string name="dashboard_total_balance">Net Savings</string>
+    <string name="dashboard_income">Income</string>
+    <string name="dashboard_expense">Expenses</string>
+    <string name="dashboard_budget_health">Budget Health</string>
+    <string name="dashboard_see_all">See All</string>
+    <string name="dashboard_recent_transactions">Recent Transactions</string>
+    <string name="dashboard_no_transactions">No transactions yet.\nTap + to add your first one.</string>
+    <string name="dashboard_ai_insights">AI Insights</string>
+    <string name="dashboard_no_insights">Your AI coach is analysing\nyour spending patterns…</string>
+    <string name="dashboard_no_budgets">No budgets set.\nTap to set up your first budget.</string>
+    <string name="dashboard_savings_rate">Savings Rate</string>
+    <string name="dashboard_add_transaction">Add Transaction</string>
+    <string name="dashboard_month_income">₹%1$s</string>
+    <string name="dashboard_month_expense">₹%1$s</string>
+</resources>

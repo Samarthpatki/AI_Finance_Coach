@@ -1,0 +1,22 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="120dp"
+    android:height="120dp"
+    android:viewportWidth="120"
+    android:viewportHeight="120">
+    
+    <!-- Simple finance/coaching icon -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M60,20 C40,20 25,35 25,55 C25,75 40,90 60,90 C80,90 95,75 95,55 C95,35 80,20 60,20 Z"/>
+    
+    <!-- Dollar sign -->
+    <path
+        android:fillColor="#2E7D32"
+        android:pathData="M60,35 L60,45 M60,65 L60,75 M50,45 Q60,40 70,45 Q80,50 70,55 Q60,60 50,55 Q40,50 50,45"/>
+    
+    <!-- Growth arrow -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M45,65 L55,55 L65,65 L75,55"/>
+    
+</vector>

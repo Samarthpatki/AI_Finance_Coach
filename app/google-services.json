@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "151167732654",
+    "project_id": "aifinancecoach",
+    "storage_bucket": "aifinancecoach.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:151167732654:android:f3897546b69befa45c963f",
+        "android_client_info": {
+          "package_name": "com.samarth.aifinancecoach"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDfSh31LCKbD2e7l6xKCvs_HZn7a4N8uyc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

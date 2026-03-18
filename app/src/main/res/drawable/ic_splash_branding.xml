@@ -1,0 +1,48 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="200dp"
+    android:height="40dp"
+    android:viewportWidth="200"
+    android:viewportHeight="40">
+    
+    <!-- AI Finance Coach text as vector -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M10,25 L10,15 L15,15 L15,25 L20,25 L20,15 L25,15 L25,25 L30,25 L30,10 L10,10 L10,25 Z"/>
+    
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M35,25 L35,10 L40,10 L40,20 L45,15 L50,15 L45,20 L50,25 L45,25 L40,20 L40,25 Z"/>
+    
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M55,25 L55,10 L65,10 Q70,10 70,15 Q70,20 65,20 L60,20 L60,25 Z M60,15 L65,15 Q65,15 65,15 Q65,15 65,15 L60,15 Z"/>
+    
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M75,25 L75,10 L85,10 Q90,10 90,15 Q90,20 85,20 L80,20 L80,25 Z M80,15 L85,15 Q85,15 85,15 Q85,15 85,15 L80,15 Z"/>
+    
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M95,25 L95,10 L105,10 L105,15 L100,15 L100,17 L105,17 L105,20 L100,20 L100,22 L105,22 L105,25 Z"/>
+    
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M110,25 L110,10 L120,10 L120,25 Z M115,15 L115,20 L117,20 L117,15 Z"/>
+    
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M125,25 L125,10 L135,10 L135,15 L130,15 L130,25 Z"/>
+    
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M140,25 L140,10 L150,10 L150,15 L145,15 L145,20 L150,20 L150,25 Z"/>
+    
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M155,25 L155,10 L165,10 L165,25 Z M160,15 L160,20 L162,20 L162,15 Z"/>
+    
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M170,25 L170,10 L180,10 L180,25 Z M175,15 L175,20 L177,20 L177,15 Z"/>
+    
+</vector>
