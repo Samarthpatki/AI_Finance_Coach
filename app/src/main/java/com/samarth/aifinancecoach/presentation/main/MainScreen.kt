@@ -163,8 +163,9 @@ fun MainScreen(navController: NavController) {
                     onBudgetClick = { scope.launch { pagerState.animateScrollToPage(2) } },
                     onSeeAllTransactionsClick = { scope.launch { pagerState.animateScrollToPage(1) } },
                     onInsightClick = { insight -> navController.navigate(Screen.AiInsights.route) },
-                    onProfileClick = { navController.navigate(Screen.Profile.route) },
-                    onTransactionClick = { transaction -> 
+                    onProfileClick = { dashboardViewModel.onProfileClick() },
+//                    onProfileClick = { navController.navigate(Screen.Profile.route) },
+                    onTransactionClick = { transaction ->
                         navController.navigate(Screen.TransactionDetail.createRoute(transaction.id)) 
                     },
                     onDeleteTransaction = { transaction -> 

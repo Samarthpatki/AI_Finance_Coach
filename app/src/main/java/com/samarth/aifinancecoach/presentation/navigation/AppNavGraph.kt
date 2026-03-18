@@ -22,6 +22,7 @@ import com.samarth.aifinancecoach.presentation.budget.setup.BudgetSetupScreen
 import com.samarth.aifinancecoach.presentation.ai.AiCoachScreen
 import com.samarth.aifinancecoach.presentation.ai.insights.AiInsightsScreen
 import com.samarth.aifinancecoach.presentation.ai.report.AiReportScreen
+import com.samarth.aifinancecoach.presentation.settings.SettingsScreen
 
 @Composable
 fun AppNavGraph(
@@ -135,7 +136,7 @@ fun AppNavGraph(
         }
 
         composable(Screen.Settings.route) {
-            // SettingsScreen(navController = navController)
+            SettingsScreen(navController = navController)
         }
     }
 }

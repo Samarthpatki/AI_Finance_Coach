@@ -36,7 +36,7 @@ class DashboardViewModel @Inject constructor(
         loadDashboard()
     }
 
-    fun loadDashboard() {
+    private fun loadDashboard() {
         viewModelScope.launch {
             _state.update { it.copy(isLoading = true) }
             
@@ -100,7 +100,7 @@ class DashboardViewModel @Inject constructor(
 
     fun onProfileClick() {
         viewModelScope.launch {
-            _navigationEvent.emit(Screen.Profile.route)
+            _navigationEvent.emit(Screen.Settings.route)
         }
     }
 }

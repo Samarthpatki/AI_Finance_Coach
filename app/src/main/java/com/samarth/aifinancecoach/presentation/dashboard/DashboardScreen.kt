@@ -10,6 +10,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Face
 import androidx.compose.material.icons.rounded.Person
+import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -52,7 +53,7 @@ fun DashboardScreen(
         onBudgetClick = viewModel::onBudgetClick,
         onSeeAllTransactionsClick = viewModel::onSeeAllTransactionsClick,
         onInsightClick = viewModel::onInsightClick,
-        onProfileClick = viewModel::onProfileClick,
+        onProfileClick = { navController.navigate(Screen.Settings.route) },
         onTransactionClick = { transaction ->
             navController.navigate(Screen.TransactionDetail.createRoute(transaction.id))
         },
@@ -93,8 +94,8 @@ fun DashboardContent(
                 actions = {
                     IconButton(onClick = onProfileClick) {
                         Icon(
-                            imageVector = Icons.Rounded.Person,
-                            contentDescription = "Profile",
+                            imageVector = Icons.Rounded.Settings,
+                            contentDescription = "Settings",
                             tint = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }

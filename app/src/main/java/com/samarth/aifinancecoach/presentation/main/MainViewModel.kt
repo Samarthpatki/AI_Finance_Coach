@@ -8,6 +8,9 @@ import com.samarth.aifinancecoach.data.datastore.UserPreferencesDataStore
 import com.samarth.aifinancecoach.domain.usecase.auth.IsUserLoggedInUseCase
 import com.samarth.aifinancecoach.presentation.navigation.Screen
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -24,6 +27,14 @@ class MainViewModel @Inject constructor(
     // Decides where the app navigates after splash
     private val _startDestination = mutableStateOf(Screen.Onboarding.route)
     val startDestination: State<String> = _startDestination
+
+    val isDarkMode: StateFlow<Boolean> = userPreferencesDataStore
+        .isDarkModeEnabled()
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = true
+        )
 
     init {
         decideStartDestination()
@@ -56,13 +67,6 @@ class MainViewModel @Inject constructor(
                 // Auth check done — dismiss splash
                 _isLoading.value = false
             }
-        }
-    }
-    
-    // Helper to reset onboarding for testing
-    fun resetOnboarding() {
-        viewModelScope.launch {
-            userPreferencesDataStore.setOnboardingComplete(false)
         }
     }
 }

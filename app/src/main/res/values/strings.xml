@@ -219,4 +219,27 @@
     <string name="ai_report_key_insights">Key Insights</string>
     <string name="ai_report_recommendations">Recommendations</string>
     <string name="ai_report_spending_breakdown">Spending Breakdown</string>
+
+    <!-- Settings / Profile -->
+    <string name="settings_title">Profile</string>
+    <string name="settings_edit_profile">Edit Profile</string>
+    <string name="settings_save_profile">Save Changes</string>
+    <string name="settings_name_label">Full Name</string>
+    <string name="settings_name_hint">Enter your name</string>
+    <string name="settings_email_label">Email</string>
+    <string name="settings_income_label">Monthly Income</string>
+    <string name="settings_income_hint">Enter monthly income</string>
+    <string name="settings_currency_label">Currency</string>
+    <string name="settings_dp_change">Change Photo</string>
+    <string name="settings_dark_mode">Dark Mode</string>
+    <string name="settings_dark_mode_desc">Switch between dark and light theme</string>
+    <string name="settings_sign_out">Sign Out</string>
+    <string name="settings_sign_out_confirm">Sign out of AI Finance Coach?</string>
+    <string name="settings_sign_out_confirm_desc">Your data will remain saved on this device.</string>
+    <string name="settings_sign_out_yes">Sign Out</string>
+    <string name="settings_sign_out_cancel">Cancel</string>
+    <string name="settings_profile_updated">Profile updated successfully</string>
+    <string name="settings_version">Version %1$s</string>
+    <string name="settings_app_info">App Info</string>
+    <string name="settings_made_with">Made with ❤️ by Samarth</string>
 </resources>
