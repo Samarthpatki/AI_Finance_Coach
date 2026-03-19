@@ -48,19 +48,19 @@ Clean Architecture, and a RAG pipeline powered by Gemini AI.
 
 | Onboarding | Login | Dashboard | Transactions |
 |:---:|:---:|:---:|:---:|
-| <img src="readme_assets/screenshots/onboarding.png" width="200"/> | <img src="readme_assets/screenshots/login.png" width="200"/> | <img src="readme_assets/screenshots/dashboard.png" width="200"/> | <img src="readme_assets/screenshots/transactions.png" width="200"/> |
+| <img src="app/readme_assets/onboarding.png" width="200"/> | <img src="app/readme_assets/login.png" width="200"/> | <img src="app/readme_assets/dashboard.png" width="200"/> | <img src="app/readme_assets/transactions.png" width="200"/> |
 
 | Add Transaction | Transaction Detail | Budget Tracking |
 |:---:|:---:|:---:|
-| <img src="readme_assets/screenshots/add_transaction.png" width="200"/> | <img src="readme_assets/screenshots/transaction_detail.png" width="200"/> | <img src="readme_assets/screenshots/budget.png" width="200"/> |
+| <img src="app/readme_assets/add_transaction.png" width="200"/> | <img src="app/readme_assets/transaction_detail.png" width="200"/> | <img src="app/readme_assets/budget.png" width="200"/> |
 
 | Add Budget | AI Chat (Empty) | AI Chat (Active) |
 |:---:|:---:|:---:|
-| <img src="readme_assets/screenshots/add_budget.png" width="200"/> | <img src="readme_assets/screenshots/ai_chat_empty.png" width="200"/> | <img src="readme_assets/screenshots/ai_chat.png" width="200"/> |
+| <img src="app/readme_assets/add_budget.png" width="200"/> | <img src="app/readme_assets/ai_chat_empty.png" width="200"/> | <img src="app/readme_assets/ai_chat.png" width="200"/> |
 
 | AI Insights | Monthly Report | Profile |
 |:---:|:---:|:---:|
-| <img src="readme_assets/screenshots/ai_insights.png" width="200"/> | <img src="readme_assets/screenshots/ai_report.png" width="200"/> | <img src="readme_assets/screenshots/profile.png" width="200"/> |
+| <img src="app/readme_assets/ai_insights.png" width="200"/> | <img src="app/readme_assets/ai_report.png" width="200"/> | <img src="app/readme_assets/profile.png" width="200"/> |
 </div>
 
 ---
