@@ -5,7 +5,7 @@ Ai Finance coach is an app which lets you analyse your spending and income &amp;
 
 <div align="center">
 
-<img src="assets/ic_launcher.png" width="100" height="100"
+<img src="readme_assets/logo.jpg" width="100" height="100"
 style="border-radius: 22px"/>
 
 # FinSense — AI Finance Coach
@@ -46,18 +46,21 @@ Clean Architecture, and a RAG pipeline powered by Gemini AI.
 
 <div align="center">
 
-| Onboarding | Dashboard | Transactions |
-|:---:|:---:|:---:|
-| <img src="assets/screenshots/onboarding.png" width="200"/> | <img src="assets/screenshots/dashboard.png" width="200"/> | <img src="assets/screenshots/transactions.png" width="200"/> |
+| Onboarding | Login | Dashboard | Transactions |
+|:---:|:---:|:---:|:---:|
+| <img src="readme_assets/screenshots/onboarding.png" width="200"/> | <img src="readme_assets/screenshots/login.png" width="200"/> | <img src="readme_assets/screenshots/dashboard.png" width="200"/> | <img src="readme_assets/screenshots/transactions.png" width="200"/> |
 
-| Add Transaction | Budget | AI Coach |
+| Add Transaction | Transaction Detail | Budget Tracking |
 |:---:|:---:|:---:|
-| <img src="assets/screenshots/add_transaction.png" width="200"/> | <img src="assets/screenshots/budget.png" width="200"/> | <img src="assets/screenshots/ai_chat.png" width="200"/> |
+| <img src="readme_assets/screenshots/add_transaction.png" width="200"/> | <img src="readme_assets/screenshots/transaction_detail.png" width="200"/> | <img src="readme_assets/screenshots/budget.png" width="200"/> |
+
+| Add Budget | AI Chat (Empty) | AI Chat (Active) |
+|:---:|:---:|:---:|
+| <img src="readme_assets/screenshots/add_budget.png" width="200"/> | <img src="readme_assets/screenshots/ai_chat_empty.png" width="200"/> | <img src="readme_assets/screenshots/ai_chat.png" width="200"/> |
 
 | AI Insights | Monthly Report | Profile |
 |:---:|:---:|:---:|
-| <img src="assets/screenshots/insights.png" width="200"/> | <img src="assets/screenshots/report.png" width="200"/> | <img src="assets/screenshots/profile.png" width="200"/> |
-
+| <img src="readme_assets/screenshots/ai_insights.png" width="200"/> | <img src="readme_assets/screenshots/ai_report.png" width="200"/> | <img src="readme_assets/screenshots/profile.png" width="200"/> |
 </div>
 
 ---
@@ -108,7 +111,7 @@ Minimum Android version: Android 8.0 (API 26)
 
 ## How The AI Works
 ```
-┌─────────────────────────────────────────────────┐
+┌──────────────────────────────────────────────────┐
 │              RAG Pipeline                        │
 │                                                  │
 │  User Question                                   │
@@ -116,7 +119,7 @@ Minimum Android version: Android 8.0 (API 26)
 │  BuildFinancialContextUseCase                    │
 │  → Last 30 transactions from Room DB             │
 │  → Active budgets + spending totals              │
-│  → Income, savings rate, top categories         │
+│  → Income, savings rate, top categories          │
 │       ↓                                          │
 │  Structured Financial Context                    │
 │  (real numbers, real categories, real dates)     │
@@ -128,7 +131,7 @@ Minimum Android version: Android 8.0 (API 26)
 │  Streamed Response (token by token)              │
 │       ↓                                          │
 │  Personalised Answer based on YOUR data          │
-└─────────────────────────────────────────────────┘
+└──────────────────────────────────────────────────┘
 ```
 
 **Result:**
@@ -141,18 +144,18 @@ Minimum Android version: Android 8.0 (API 26)
 ## Architecture
 ```
 ┌────────────────────────────────────────────────┐
-│                Presentation Layer               │
-│   Jetpack Compose Screens + ViewModels          │
-│   StateFlow + collectAsStateWithLifecycle()     │
+│                Presentation Layer              │
+│   Jetpack Compose Screens + ViewModels         │
+│   StateFlow + collectAsStateWithLifecycle()    │
 └──────────────────┬─────────────────────────────┘
                    │
 ┌──────────────────▼─────────────────────────────┐
-│                 Domain Layer                    │
+│                 Domain Layer                   │
 │   Use Cases + Repository Interfaces            │
 │   Pure Kotlin — zero Android dependencies      │
 └──────────┬───────────────────┬─────────────────┘
            │                   │
-┌──────────▼──────┐   ┌────────▼────────────────┐
+┌──────────▼──────┐   ┌────────▼─────────────────┐
 │   Local Data    │   │     Remote Data          │
 │                 │   │                          │
 │  Room DB        │   │  Gemini 1.5 Flash API    │
