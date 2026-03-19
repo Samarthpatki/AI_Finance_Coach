@@ -290,26 +290,26 @@ fun SignUpScreen(
                             containerColor = MaterialTheme.colorScheme.surface
                         )
                     ) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.Center
-                        ) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.google_icon),
-                                contentDescription = "Google Logo",
-                                modifier = Modifier.size(22.dp),
-                                tint = Color.Unspecified
-                            )
-                            Spacer(modifier = Modifier.width(12.dp))
-                            Text(
-                                text = stringResource(R.string.signup_with_google),
-                                style = MaterialTheme.typography.titleMedium.copy(
-                                    fontFamily = DmSansFontFamily,
-                                    fontWeight = FontWeight.Medium
-                                ),
-                                color = MaterialTheme.colorScheme.onSurface
-                            )
-                        }
+//                        Row(
+//                            verticalAlignment = Alignment.CenterVertically,
+//                            horizontalArrangement = Arrangement.Center
+//                        ) {
+//                            Icon(
+//                                painter = painterResource(id = R.drawable.google_icon),
+//                                contentDescription = "Google Logo",
+//                                modifier = Modifier.size(22.dp),
+//                                tint = Color.Unspecified
+//                            )
+//                            Spacer(modifier = Modifier.width(12.dp))
+//                            Text(
+//                                text = stringResource(R.string.signup_with_google),
+//                                style = MaterialTheme.typography.titleMedium.copy(
+//                                    fontFamily = DmSansFontFamily,
+//                                    fontWeight = FontWeight.Medium
+//                                ),
+//                                color = MaterialTheme.colorScheme.onSurface
+//                            )
+//                        }
                     }
 
                     Spacer(modifier = Modifier.height(20.dp))

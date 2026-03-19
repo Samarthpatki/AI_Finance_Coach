@@ -74,19 +74,19 @@ fun OnboardingScreen(
             .padding(bottom = 32.dp)
     ) {
         // Top Skip Button
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 16.dp, end = 24.dp),
-            contentAlignment = Alignment.TopEnd
-        ) {
-            Text(
-                text = stringResource(R.string.onboarding_skip),
-                style = MaterialTheme.typography.labelLarge.copy(fontFamily = DmSansFontFamily),
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.clickable { viewModel.skipOnboarding() }
-            )
-        }
+//        Box(
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .padding(top = 16.dp, end = 24.dp),
+//            contentAlignment = Alignment.TopEnd
+//        ) {
+//            Text(
+//                text = stringResource(R.string.onboarding_skip),
+//                style = MaterialTheme.typography.labelLarge.copy(fontFamily = DmSansFontFamily),
+//                color = MaterialTheme.colorScheme.onSurfaceVariant,
+//                modifier = Modifier.clickable { viewModel.skipOnboarding() }
+//            )
+//        }
 
         HorizontalPager(
             state = pagerState,

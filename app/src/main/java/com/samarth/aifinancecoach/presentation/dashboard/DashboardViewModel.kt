@@ -43,32 +43,33 @@ class DashboardViewModel @Inject constructor(
             val month = DateUtils.getCurrentMonth()
             val year = DateUtils.getCurrentYear()
 
-            // Get User Name
-            dataStore.getUserName().collectLatest { name ->
+            // Observe User Name
+            dataStore.getUserName().onEach { name ->
                 _state.update { it.copy(userName = name) }
-            }
+            }.launchIn(viewModelScope)
 
-            // Collect Recent Transactions
-            getRecentTransactionsUseCase(5).collectLatest { transactions ->
+            // Observe Recent Transactions
+            getRecentTransactionsUseCase(5).onEach { transactions ->
                 _state.update { it.copy(recentTransactions = transactions) }
-            }
+            }.launchIn(viewModelScope)
 
-            // Get Analytics
-            val analytics = getMonthlyAnalyticsUseCase(month, year)
-            _state.update { it.copy(
-                totalIncome = analytics.totalIncome,
-                totalExpense = analytics.totalExpense
-            ) }
+            // Observe Analytics
+            getMonthlyAnalyticsUseCase(month, year).onEach { analytics ->
+                _state.update { it.copy(
+                    totalIncome = analytics.totalIncome,
+                    totalExpense = analytics.totalExpense
+                ) }
+            }.launchIn(viewModelScope)
 
-            // Collect Budgets
-            getBudgetsForMonthUseCase(month, year).collectLatest { budgets ->
+            // Observe Budgets
+            getBudgetsForMonthUseCase(month, year).onEach { budgets ->
                 _state.update { it.copy(budgets = budgets) }
-            }
+            }.launchIn(viewModelScope)
 
-            // Collect AI Insights
-            getAiInsightsUseCase().collectLatest { insights ->
+            // Observe AI Insights
+            getAiInsightsUseCase().onEach { insights ->
                 _state.update { it.copy(aiInsights = insights) }
-            }
+            }.launchIn(viewModelScope)
 
             _state.update { it.copy(isLoading = false) }
         }

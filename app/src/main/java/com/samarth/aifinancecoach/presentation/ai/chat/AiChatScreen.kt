@@ -63,76 +63,82 @@ fun AiChatScreen(
         }
     }
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Box(
-                            modifier = Modifier
-                                .size(32.dp)
-                                .clip(CircleShape)
-                                .background(
-                                    Brush.horizontalGradient(
-                                        listOf(Color(0xFF00C896), Color(0xFF0096FF))
-                                    )
-                                ),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.AutoAwesome,
-                                contentDescription = null,
-                                tint = Color.White,
-                                modifier = Modifier.size(18.dp)
-                            )
-                        }
-                        Spacer(modifier = Modifier.width(10.dp))
-                        Column {
-                            Text(
-                                text = stringResource(R.string.ai_chat_title),
-                                style = MaterialTheme.typography.titleMedium.copy(
-                                    fontFamily = SoraFontFamily,
-                                    fontWeight = FontWeight.Bold
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .imePadding() // Ensures input bar moves up with keyboard
+    ) {
+        // Custom Top Bar (Attached to TabLayout above)
+        Surface(
+            modifier = Modifier.fillMaxWidth(),
+            color = MaterialTheme.colorScheme.background,
+            tonalElevation = 0.dp
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 8.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Box(
+                        modifier = Modifier
+                            .size(28.dp)
+                            .clip(CircleShape)
+                            .background(
+                                Brush.horizontalGradient(
+                                    listOf(Color(0xFF00C896), Color(0xFF0096FF))
                                 )
-                            )
-                            Text(
-                                text = "Powered by Gemini",
-                                style = MaterialTheme.typography.labelSmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                        }
+                            ),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.AutoAwesome,
+                            contentDescription = null,
+                            tint = Color.White,
+                            modifier = Modifier.size(16.dp)
+                        )
                     }
-                },
-                actions = {
-                    if (state.messages.isNotEmpty()) {
-                        IconButton(onClick = viewModel::onClearChatClicked) {
-                            Icon(
-                                imageVector = Icons.Default.DeleteOutline,
-                                contentDescription = "Clear Chat",
-                                modifier = Modifier.size(24.dp)
+                    Spacer(modifier = Modifier.width(10.dp))
+                    Column {
+                        Text(
+                            text = stringResource(R.string.ai_chat_title),
+                            style = MaterialTheme.typography.titleSmall.copy(
+                                fontFamily = SoraFontFamily,
+                                fontWeight = FontWeight.Bold
                             )
-                        }
+                        )
+                        Text(
+                            text = "Powered by Gemini",
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
                     }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.background
-                )
-            )
-        },
-        bottomBar = {
-            ChatInputBar(
-                inputText = state.inputText,
-                onInputChanged = viewModel::onInputChanged,
-                onSend = viewModel::onSendMessage,
-                isLoading = state.isLoading
-            )
+                }
+                
+                if (state.messages.isNotEmpty()) {
+                    IconButton(
+                        onClick = viewModel::onClearChatClicked,
+                        modifier = Modifier.size(32.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.DeleteOutline,
+                            contentDescription = "Clear Chat",
+                            modifier = Modifier.size(20.dp),
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                }
+            }
         }
-    ) { paddingValues ->
+
+        HorizontalDivider(thickness = 0.5.dp, color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
+
         Box(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-                .imePadding()
+                .weight(1f)
+                .fillMaxWidth()
         ) {
             if (state.messages.isEmpty()) {
                 EmptyChatState(onPromptSelected = viewModel::onQuickPromptSelected)
@@ -155,6 +161,14 @@ fun AiChatScreen(
                 }
             }
         }
+
+        // Bottom Bar (Attached to bottom)
+        ChatInputBar(
+            inputText = state.inputText,
+            onInputChanged = viewModel::onInputChanged,
+            onSend = viewModel::onSendMessage,
+            isLoading = state.isLoading
+        )
     }
 
     if (state.showClearDialog) {
@@ -408,68 +422,80 @@ fun ChatInputBar(
 ) {
     Surface(
         modifier = Modifier.fillMaxWidth(),
-        color = MaterialTheme.colorScheme.background, // Changed to background to blend better
-        tonalElevation = 0.dp // Removed elevation
+        color = MaterialTheme.colorScheme.background,
+        tonalElevation = 0.dp
     ) {
-        Row(
-            modifier = Modifier
-                .padding(horizontal = 12.dp, vertical = 8.dp)
-                .navigationBarsPadding(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            OutlinedTextField(
-                value = inputText,
-                onValueChange = onInputChanged,
+        Column {
+            HorizontalDivider(thickness = 0.5.dp, color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
+            Row(
                 modifier = Modifier
-                    .weight(1f)
-                    .clip(RoundedCornerShape(20.dp)),
-                placeholder = { 
-                    Text(
-                        stringResource(R.string.ai_chat_input_hint),
-                        style = MaterialTheme.typography.bodyMedium
-                    ) 
-                },
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = Color.Transparent,
-                    unfocusedBorderColor = Color.Transparent,
-                    focusedContainerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f),
-                    unfocusedContainerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f)
-                ),
-                maxLines = 3,
-                textStyle = MaterialTheme.typography.bodyMedium,
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Text,
-                    imeAction = ImeAction.Send
-                ),
-                keyboardActions = KeyboardActions(onSend = { onSend() })
-            )
-
-            val sendButtonColor by animateColorAsState(
-                targetValue = if (inputText.isNotBlank() && !isLoading) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceVariant,
-                label = "sendButtonColor"
-            )
-
-            Box(
-                modifier = Modifier
-                    .size(42.dp) // Reduced size
-                    .clip(CircleShape)
-                    .background(
-                        if (inputText.isNotBlank() && !isLoading) {
-                            Brush.horizontalGradient(listOf(Color(0xFF00C896), Color(0xFF0096FF)))
-                        } else {
-                            Brush.linearGradient(listOf(sendButtonColor, sendButtonColor))
-                        }
-                    )
-                    .clickable(enabled = inputText.isNotBlank() && !isLoading) { onSend() },
-                contentAlignment = Alignment.Center
+                    .padding(horizontal = 12.dp, vertical = 8.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Filled.Send,
-                    contentDescription = null,
-                    modifier = Modifier.size(20.dp), // Reduced icon size
-                    tint = if (inputText.isNotBlank() && !isLoading) Color.White else MaterialTheme.colorScheme.onSurfaceVariant
+                OutlinedTextField(
+                    value = inputText,
+                    onValueChange = onInputChanged,
+                    modifier = Modifier
+                        .weight(1f)
+                        .clip(RoundedCornerShape(20.dp))
+                        .border(
+                            width = 0.5.dp,
+                            color = MaterialTheme.colorScheme.outlineVariant,
+                            shape = RoundedCornerShape(20.dp)
+                        ),
+                    placeholder = { 
+                        Text(
+                            stringResource(R.string.ai_chat_input_hint),
+                            style = MaterialTheme.typography.bodyMedium
+                        ) 
+                    },
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = Color.Transparent,
+                        unfocusedBorderColor = Color.Transparent,
+                        focusedContainerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f),
+                        unfocusedContainerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f)
+                    ),
+                    maxLines = 3,
+                    textStyle = MaterialTheme.typography.bodyMedium,
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Text,
+                        imeAction = ImeAction.Send
+                    ),
+                    keyboardActions = KeyboardActions(onSend = { onSend() })
                 )
+
+                val sendButtonColor by animateColorAsState(
+                    targetValue = if (inputText.isNotBlank() && !isLoading) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceVariant,
+                    label = "sendButtonColor"
+                )
+
+                Box(
+                    modifier = Modifier
+                        .size(40.dp)
+                        .clip(CircleShape)
+                        .background(
+                            if (inputText.isNotBlank() && !isLoading) {
+                                Brush.horizontalGradient(listOf(Color(0xFF00C896), Color(0xFF0096FF)))
+                            } else {
+                                Brush.linearGradient(listOf(sendButtonColor, sendButtonColor))
+                            }
+                        )
+                        .border(
+                            width = 0.5.dp,
+                            color = MaterialTheme.colorScheme.outlineVariant,
+                            shape = CircleShape
+                        )
+                        .clickable(enabled = inputText.isNotBlank() && !isLoading) { onSend() },
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.Send,
+                        contentDescription = null,
+                        modifier = Modifier.size(18.dp),
+                        tint = if (inputText.isNotBlank() && !isLoading) Color.White else MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
             }
         }
     }
@@ -486,7 +512,7 @@ fun EmptyChatState(onPromptSelected: (String) -> Unit) {
     ) {
         Box(
             modifier = Modifier
-                .size(64.dp)
+                .size(56.dp)
                 .clip(CircleShape)
                 .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)),
             contentAlignment = Alignment.Center
@@ -495,19 +521,19 @@ fun EmptyChatState(onPromptSelected: (String) -> Unit) {
                 imageVector = Icons.Default.AutoAwesome,
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.size(32.dp)
+                modifier = Modifier.size(28.dp)
             )
         }
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.height(16.dp))
         Text(
             text = stringResource(R.string.ai_chat_empty_title),
-            style = MaterialTheme.typography.titleLarge.copy(
+            style = MaterialTheme.typography.titleMedium.copy(
                 fontFamily = SoraFontFamily,
                 fontWeight = FontWeight.Bold
             ),
             textAlign = TextAlign.Center
         )
-        Spacer(modifier = Modifier.height(6.dp))
+        Spacer(modifier = Modifier.height(4.dp))
         Text(
             text = stringResource(R.string.ai_chat_empty_subtitle),
             style = MaterialTheme.typography.bodySmall,
@@ -515,7 +541,7 @@ fun EmptyChatState(onPromptSelected: (String) -> Unit) {
             textAlign = TextAlign.Center,
             modifier = Modifier.padding(horizontal = 12.dp)
         )
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(20.dp))
         
         val prompts = listOf(
             stringResource(R.string.ai_prompt_spending),
@@ -542,7 +568,7 @@ fun EmptyChatState(onPromptSelected: (String) -> Unit) {
                             maxLines = 1
                         ) 
                     },
-                    shape = RoundedCornerShape(16.dp),
+                    shape = RoundedCornerShape(14.dp),
                 )
             }
         }

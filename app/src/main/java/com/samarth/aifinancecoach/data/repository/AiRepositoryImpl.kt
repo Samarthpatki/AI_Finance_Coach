@@ -10,6 +10,7 @@ import com.samarth.aifinancecoach.domain.model.FinancialContext
 import com.samarth.aifinancecoach.domain.model.MessageRole
 import com.samarth.aifinancecoach.domain.repository.AiRepository
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onCompletion
 import javax.inject.Inject
@@ -75,6 +76,7 @@ class AiRepositoryImpl @Inject constructor(
     }
 
     override fun getAiInsights(): Flow<List<AiInsight>> {
-        TODO("Not yet implemented")
+        // Temporary placeholder to prevent crash while local storage for insights is not yet implemented
+        return flowOf(emptyList())
     }
 }

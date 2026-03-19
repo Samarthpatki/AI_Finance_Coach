@@ -7,6 +7,7 @@ import com.samarth.aifinancecoach.domain.usecase.analytics.GetMonthlyAnalyticsUs
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -28,14 +29,18 @@ class AiReportViewModel @Inject constructor(
         _state.update { it.copy(isLoading = true) }
         viewModelScope.launch {
             try {
+                // Since GetMonthlyAnalyticsUseCase now returns a Flow, 
+                // we use .first() to get the current snapshot for the report generation.
                 val analytics = getMonthlyAnalyticsUseCase(
                     _state.value.currentMonth,
                     _state.value.currentYear
-                )
+                ).first()
+                
                 val report = generateMonthlyReportUseCase(
                     _state.value.currentMonth,
                     _state.value.currentYear
                 )
+
                 _state.update { it.copy(
                     reportContent = report,
                     monthlyAnalytics = analytics,
