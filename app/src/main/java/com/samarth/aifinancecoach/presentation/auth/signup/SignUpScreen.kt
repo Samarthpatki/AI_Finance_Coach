@@ -144,13 +144,13 @@ fun SignUpScreen(
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(24.dp)
+                        .padding(horizontal = 24.dp, vertical = 20.dp)
                         .verticalScroll(scrollState),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
                         text = stringResource(R.string.signup_title),
-                        style = MaterialTheme.typography.headlineLarge.copy(
+                        style = MaterialTheme.typography.headlineMedium.copy(
                             fontFamily = SoraFontFamily,
                             fontWeight = FontWeight.Bold
                         ),
@@ -168,7 +168,7 @@ fun SignUpScreen(
                         textAlign = TextAlign.Start
                     )
 
-                    Spacer(modifier = Modifier.height(24.dp))
+                    Spacer(modifier = Modifier.height(20.dp))
 
                     // Name Input
                     OutlinedTextField(
@@ -177,7 +177,7 @@ fun SignUpScreen(
                         label = { Text(stringResource(R.string.signup_name_label)) },
                         placeholder = { Text(stringResource(R.string.signup_name_hint)) },
                         modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(8.dp),
+                        shape = RoundedCornerShape(12.dp),
                         keyboardOptions = KeyboardOptions(
                             keyboardType = KeyboardType.Text,
                             imeAction = ImeAction.Next
@@ -193,7 +193,7 @@ fun SignUpScreen(
                         label = { Text(stringResource(R.string.signup_email_label)) },
                         placeholder = { Text(stringResource(R.string.signup_email_hint)) },
                         modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(8.dp),
+                        shape = RoundedCornerShape(12.dp),
                         keyboardOptions = KeyboardOptions(
                             keyboardType = KeyboardType.Email,
                             imeAction = ImeAction.Next
@@ -209,7 +209,7 @@ fun SignUpScreen(
                         label = { Text(stringResource(R.string.signup_password_label)) },
                         placeholder = { Text(stringResource(R.string.signup_password_hint)) },
                         modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(8.dp),
+                        shape = RoundedCornerShape(12.dp),
                         visualTransformation = PasswordVisualTransformation(),
                         keyboardOptions = KeyboardOptions(
                             keyboardType = KeyboardType.Password,
@@ -226,7 +226,7 @@ fun SignUpScreen(
                         label = { Text(stringResource(R.string.signup_confirm_password_label)) },
                         placeholder = { Text(stringResource(R.string.signup_confirm_password_hint)) },
                         modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(8.dp),
+                        shape = RoundedCornerShape(12.dp),
                         visualTransformation = PasswordVisualTransformation(),
                         keyboardOptions = KeyboardOptions(
                             keyboardType = KeyboardType.Password,
@@ -256,15 +256,19 @@ fun SignUpScreen(
                                 ),
                             contentAlignment = Alignment.Center
                         ) {
-                            Text(
-                                text = stringResource(R.string.signup_continue),
-                                style = MaterialTheme.typography.titleLarge.copy(fontFamily = DmSansFontFamily),
-                                color = Color.White
-                            )
+                            if (state.isLoading) {
+                                CircularProgressIndicator(color = Color.White, modifier = Modifier.size(24.dp))
+                            } else {
+                                Text(
+                                    text = stringResource(R.string.signup_continue),
+                                    style = MaterialTheme.typography.titleMedium.copy(fontFamily = DmSansFontFamily),
+                                    color = Color.White
+                                )
+                            }
                         }
                     }
 
-                    Spacer(modifier = Modifier.height(16.dp))
+                    Spacer(modifier = Modifier.height(20.dp))
 
                     Text(
                         text = stringResource(R.string.login_or),
@@ -272,7 +276,7 @@ fun SignUpScreen(
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
 
-                    Spacer(modifier = Modifier.height(16.dp))
+                    Spacer(modifier = Modifier.height(20.dp))
 
                     // Google Sign-Up Button
                     OutlinedButton(
@@ -280,7 +284,7 @@ fun SignUpScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(56.dp),
-                        shape = RoundedCornerShape(12.dp),
+                        shape = RoundedCornerShape(28.dp),
                         border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
                         colors = ButtonDefaults.outlinedButtonColors(
                             containerColor = MaterialTheme.colorScheme.surface
@@ -291,9 +295,9 @@ fun SignUpScreen(
                             horizontalArrangement = Arrangement.Center
                         ) {
                             Icon(
-                                painter = painterResource(id = android.R.drawable.ic_menu_info_details),
+                                painter = painterResource(id = R.drawable.google_icon),
                                 contentDescription = "Google Logo",
-                                modifier = Modifier.size(24.dp),
+                                modifier = Modifier.size(22.dp),
                                 tint = Color.Unspecified
                             )
                             Spacer(modifier = Modifier.width(12.dp))
@@ -308,7 +312,7 @@ fun SignUpScreen(
                         }
                     }
 
-                    Spacer(modifier = Modifier.height(24.dp))
+                    Spacer(modifier = Modifier.height(20.dp))
 
                     // Login Link
                     Row(
@@ -333,15 +337,13 @@ fun SignUpScreen(
                         }
                     }
 
-                    if (state.isLoading) {
-                        CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
-                    }
-
                     state.error?.let { error ->
+                        Spacer(modifier = Modifier.height(8.dp))
                         Text(
                             text = error,
                             color = MaterialTheme.colorScheme.error,
-                            style = MaterialTheme.typography.bodySmall
+                            style = MaterialTheme.typography.bodySmall,
+                            textAlign = TextAlign.Center
                         )
                     }
                 }

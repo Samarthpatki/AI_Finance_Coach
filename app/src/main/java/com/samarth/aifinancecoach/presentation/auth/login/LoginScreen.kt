@@ -6,8 +6,10 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -45,6 +47,7 @@ fun LoginScreen(
     val state by viewModel.state.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val backgroundColor = MaterialTheme.colorScheme.background
+    val scrollState = rememberScrollState()
 
     val gso = remember {
         GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -95,14 +98,14 @@ fun LoginScreen(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .fillMaxHeight(0.35f),
+                    .fillMaxHeight(0.3f), // Reduced from 0.35f to move content up
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
                 Box(
                     modifier = Modifier
-                        .size(70.dp)
-                        .clip(RoundedCornerShape(20.dp))
+                        .size(64.dp)
+                        .clip(RoundedCornerShape(18.dp))
                         .background(
                             Brush.horizontalGradient(
                                 listOf(Color(0xFF00C896), Color(0xFF0096FF))
@@ -119,11 +122,11 @@ fun LoginScreen(
                     )
                 }
 
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(12.dp))
 
                 Text(
                     text = "AI Finance Coach",
-                    style = MaterialTheme.typography.displaySmall.copy(
+                    style = MaterialTheme.typography.headlineMedium.copy(
                         fontFamily = SoraFontFamily,
                         fontWeight = FontWeight.Bold,
                         color = Color.White
@@ -141,12 +144,13 @@ fun LoginScreen(
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(24.dp),
+                        .padding(horizontal = 24.dp, vertical = 20.dp)
+                        .verticalScroll(scrollState),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
                         text = stringResource(R.string.login_welcome_back),
-                        style = MaterialTheme.typography.headlineLarge.copy(
+                        style = MaterialTheme.typography.headlineMedium.copy(
                             fontFamily = SoraFontFamily,
                             fontWeight = FontWeight.Bold
                         ),
@@ -154,7 +158,7 @@ fun LoginScreen(
                         textAlign = TextAlign.Start
                     )
 
-                    Spacer(modifier = Modifier.height(24.dp))
+                    Spacer(modifier = Modifier.height(20.dp))
 
                     // Email Input
                     OutlinedTextField(
@@ -163,7 +167,7 @@ fun LoginScreen(
                         label = { Text(stringResource(R.string.login_email_label)) },
                         placeholder = { Text(stringResource(R.string.login_email_hint)) },
                         modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(8.dp),
+                        shape = RoundedCornerShape(12.dp),
                         keyboardOptions = KeyboardOptions(
                             keyboardType = KeyboardType.Email,
                             imeAction = ImeAction.Next
@@ -179,7 +183,7 @@ fun LoginScreen(
                         label = { Text(stringResource(R.string.login_password_label)) },
                         placeholder = { Text(stringResource(R.string.login_password_hint)) },
                         modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(8.dp),
+                        shape = RoundedCornerShape(12.dp),
                         visualTransformation = PasswordVisualTransformation(),
                         keyboardOptions = KeyboardOptions(
                             keyboardType = KeyboardType.Password,
@@ -222,15 +226,19 @@ fun LoginScreen(
                                 ),
                             contentAlignment = Alignment.Center
                         ) {
-                            Text(
-                                text = stringResource(R.string.login_continue),
-                                style = MaterialTheme.typography.titleLarge.copy(fontFamily = DmSansFontFamily),
-                                color = Color.White
-                            )
+                            if (state.isLoading) {
+                                CircularProgressIndicator(color = Color.White, modifier = Modifier.size(24.dp))
+                            } else {
+                                Text(
+                                    text = stringResource(R.string.login_continue),
+                                    style = MaterialTheme.typography.titleMedium.copy(fontFamily = DmSansFontFamily),
+                                    color = Color.White
+                                )
+                            }
                         }
                     }
 
-                    Spacer(modifier = Modifier.height(16.dp))
+                    Spacer(modifier = Modifier.height(20.dp))
 
                     Text(
                         text = stringResource(R.string.login_or),
@@ -238,7 +246,7 @@ fun LoginScreen(
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
 
-                    Spacer(modifier = Modifier.height(16.dp))
+                    Spacer(modifier = Modifier.height(20.dp))
 
                     // Google Sign-In Button
                     OutlinedButton(
@@ -246,7 +254,7 @@ fun LoginScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(56.dp),
-                        shape = RoundedCornerShape(12.dp),
+                        shape = RoundedCornerShape(28.dp),
                         border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
                         colors = ButtonDefaults.outlinedButtonColors(
                             containerColor = MaterialTheme.colorScheme.surface
@@ -257,9 +265,9 @@ fun LoginScreen(
                             horizontalArrangement = Arrangement.Center
                         ) {
                             Icon(
-                                painter = painterResource(id = android.R.drawable.ic_menu_info_details),
+                                painter = painterResource(id = R.drawable.google_icon),
                                 contentDescription = "Google Logo",
-                                modifier = Modifier.size(24.dp),
+                                modifier = Modifier.size(22.dp),
                                 tint = Color.Unspecified
                             )
                             Spacer(modifier = Modifier.width(12.dp))
@@ -274,7 +282,7 @@ fun LoginScreen(
                         }
                     }
 
-                    Spacer(modifier = Modifier.height(24.dp))
+                    Spacer(modifier = Modifier.height(20.dp))
 
                     // Sign Up Link
                     Row(
@@ -299,15 +307,13 @@ fun LoginScreen(
                         }
                     }
 
-                    if (state.isLoading) {
-                        CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
-                    }
-
                     state.error?.let { error ->
+                        Spacer(modifier = Modifier.height(8.dp))
                         Text(
                             text = error,
                             color = MaterialTheme.colorScheme.error,
-                            style = MaterialTheme.typography.bodySmall
+                            style = MaterialTheme.typography.bodySmall,
+                            textAlign = TextAlign.Center
                         )
                     }
                 }

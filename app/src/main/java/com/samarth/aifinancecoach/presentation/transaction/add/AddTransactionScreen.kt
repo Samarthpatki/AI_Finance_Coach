@@ -394,7 +394,6 @@ private fun AccountSelector(
                                 AccountType.CASH -> Icons.Rounded.Payments
                                 AccountType.UPI -> Icons.Rounded.Smartphone
                                 AccountType.BANK -> Icons.Rounded.AccountBalance
-                                AccountType.CREDIT_CARD -> Icons.Rounded.CreditCard
                             },
                             contentDescription = null,
                             modifier = Modifier.size(18.dp)

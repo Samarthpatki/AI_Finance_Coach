@@ -19,7 +19,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Send
 import androidx.compose.material.icons.filled.AutoAwesome
-import androidx.compose.material.icons.filled.ClearAll
+import androidx.compose.material.icons.filled.DeleteOutline
 import androidx.compose.material.icons.rounded.AutoAwesome
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -70,7 +70,7 @@ fun AiChatScreen(
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Box(
                             modifier = Modifier
-                                .size(36.dp)
+                                .size(32.dp)
                                 .clip(CircleShape)
                                 .background(
                                     Brush.horizontalGradient(
@@ -83,14 +83,14 @@ fun AiChatScreen(
                                 imageVector = Icons.Default.AutoAwesome,
                                 contentDescription = null,
                                 tint = Color.White,
-                                modifier = Modifier.size(20.dp)
+                                modifier = Modifier.size(18.dp)
                             )
                         }
-                        Spacer(modifier = Modifier.width(12.dp))
+                        Spacer(modifier = Modifier.width(10.dp))
                         Column {
                             Text(
                                 text = stringResource(R.string.ai_chat_title),
-                                style = MaterialTheme.typography.titleLarge.copy(
+                                style = MaterialTheme.typography.titleMedium.copy(
                                     fontFamily = SoraFontFamily,
                                     fontWeight = FontWeight.Bold
                                 )
@@ -106,7 +106,11 @@ fun AiChatScreen(
                 actions = {
                     if (state.messages.isNotEmpty()) {
                         IconButton(onClick = viewModel::onClearChatClicked) {
-                            Icon(Icons.Default.ClearAll, contentDescription = null)
+                            Icon(
+                                imageVector = Icons.Default.DeleteOutline,
+                                contentDescription = "Clear Chat",
+                                modifier = Modifier.size(24.dp)
+                            )
                         }
                     }
                 },
@@ -136,8 +140,8 @@ fun AiChatScreen(
                 LazyColumn(
                     state = listState,
                     modifier = Modifier.fillMaxSize(),
-                    contentPadding = PaddingValues(16.dp),
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                    contentPadding = PaddingValues(12.dp),
+                    verticalArrangement = Arrangement.spacedBy(6.dp)
                 ) {
                     items(state.messages) { message ->
                         MessageBubble(
@@ -203,18 +207,18 @@ fun MessageBubble(
 fun UserMessageBubble(content: String) {
     Box(
         modifier = Modifier
-            .fillMaxWidth(0.75f)
-            .clip(RoundedCornerShape(18.dp, 18.dp, 4.dp, 18.dp))
+            .fillMaxWidth(0.8f)
+            .clip(RoundedCornerShape(16.dp, 16.dp, 4.dp, 16.dp))
             .background(
                 Brush.horizontalGradient(
                     listOf(Color(0xFF00C896), Color(0xFF0096FF))
                 )
             )
-            .padding(horizontal = 12.dp, vertical = 10.dp)
+            .padding(horizontal = 10.dp, vertical = 8.dp)
     ) {
         Text(
             text = content,
-            style = MaterialTheme.typography.bodyLarge.copy(
+            style = MaterialTheme.typography.bodyMedium.copy(
                 fontFamily = DmSansFontFamily,
                 color = Color.White
             )
@@ -233,12 +237,12 @@ fun AssistantMessageBubble(
 ) {
     Surface(
         modifier = Modifier
-            .fillMaxWidth(0.85f)
-            .clip(RoundedCornerShape(18.dp, 18.dp, 18.dp, 4.dp))
+            .fillMaxWidth(0.9f)
+            .clip(RoundedCornerShape(16.dp, 16.dp, 16.dp, 4.dp))
             .border(
                 1.dp,
-                if (isError) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.outlineVariant,
-                RoundedCornerShape(18.dp, 18.dp, 18.dp, 4.dp)
+                if (isError) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f),
+                RoundedCornerShape(16.dp, 16.dp, 16.dp, 4.dp)
             )
             .combinedClickable(
                 onLongClick = onCopy,
@@ -246,25 +250,25 @@ fun AssistantMessageBubble(
             ),
         color = MaterialTheme.colorScheme.surface
     ) {
-        Column(modifier = Modifier.padding(12.dp, 10.dp)) {
+        Column(modifier = Modifier.padding(10.dp, 8.dp)) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(6.dp)
+                horizontalArrangement = Arrangement.spacedBy(5.dp)
             ) {
                 Icon(
                     imageVector = Icons.Rounded.AutoAwesome,
                     contentDescription = null,
-                    modifier = Modifier.size(16.dp),
+                    modifier = Modifier.size(14.dp),
                     tint = MaterialTheme.colorScheme.primary
                 )
                 Text(
                     text = "AI Coach",
-                    style = MaterialTheme.typography.labelMedium,
+                    style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.primary,
                     fontWeight = FontWeight.Bold
                 )
             }
-            Spacer(modifier = Modifier.height(4.dp))
+            Spacer(modifier = Modifier.height(3.dp))
             if (isLoading && content.isEmpty()) {
                 LoadingDots()
             } else {
@@ -276,9 +280,9 @@ fun AssistantMessageBubble(
             if (isError) {
                 Text(
                     text = "⚠ Error — Tap to retry",
-                    style = MaterialTheme.typography.bodySmall,
+                    style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.error,
-                    modifier = Modifier.padding(top = 4.dp)
+                    modifier = Modifier.padding(top = 2.dp)
                 )
             }
         }
@@ -292,9 +296,9 @@ fun FormattedText(text: String, isStreaming: Boolean) {
     Box {
         Text(
             text = annotatedString,
-            style = MaterialTheme.typography.bodyLarge.copy(
+            style = MaterialTheme.typography.bodyMedium.copy(
                 fontFamily = DmSansFontFamily,
-                lineHeight = 22.sp
+                lineHeight = 20.sp
             )
         )
         if (isStreaming) {
@@ -318,9 +322,9 @@ fun Cursor() {
     
     Box(
         modifier = Modifier
-            .padding(start = 2.dp)
-            .width(2.dp)
-            .height(18.dp)
+            .padding(start = 1.dp)
+            .width(1.5.dp)
+            .height(16.dp)
             .background(MaterialTheme.colorScheme.primary.copy(alpha = alpha))
     )
 }
@@ -376,8 +380,8 @@ fun LoadingDots() {
     )
 
     Row(
-        modifier = Modifier.padding(vertical = 4.dp),
-        horizontalArrangement = Arrangement.spacedBy(4.dp)
+        modifier = Modifier.padding(vertical = 3.dp),
+        horizontalArrangement = Arrangement.spacedBy(3.dp)
     ) {
         Dot(dot1Alpha)
         Dot(dot2Alpha)
@@ -389,7 +393,7 @@ fun LoadingDots() {
 fun Dot(alpha: Float) {
     Box(
         modifier = Modifier
-            .size(8.dp)
+            .size(6.dp)
             .clip(CircleShape)
             .background(MaterialTheme.colorScheme.primary.copy(alpha = alpha))
     )
@@ -404,12 +408,12 @@ fun ChatInputBar(
 ) {
     Surface(
         modifier = Modifier.fillMaxWidth(),
-        color = MaterialTheme.colorScheme.surface,
-        tonalElevation = 2.dp
+        color = MaterialTheme.colorScheme.background, // Changed to background to blend better
+        tonalElevation = 0.dp // Removed elevation
     ) {
         Row(
             modifier = Modifier
-                .padding(12.dp)
+                .padding(horizontal = 12.dp, vertical = 8.dp)
                 .navigationBarsPadding(),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -419,15 +423,21 @@ fun ChatInputBar(
                 onValueChange = onInputChanged,
                 modifier = Modifier
                     .weight(1f)
-                    .clip(RoundedCornerShape(24.dp)),
-                placeholder = { Text(stringResource(R.string.ai_chat_input_hint)) },
+                    .clip(RoundedCornerShape(20.dp)),
+                placeholder = { 
+                    Text(
+                        stringResource(R.string.ai_chat_input_hint),
+                        style = MaterialTheme.typography.bodyMedium
+                    ) 
+                },
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = Color.Transparent,
                     unfocusedBorderColor = Color.Transparent,
-                    focusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
-                    unfocusedContainerColor = MaterialTheme.colorScheme.surfaceVariant
+                    focusedContainerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f),
+                    unfocusedContainerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f)
                 ),
-                maxLines = 4,
+                maxLines = 3,
+                textStyle = MaterialTheme.typography.bodyMedium,
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Text,
                     imeAction = ImeAction.Send
@@ -442,7 +452,7 @@ fun ChatInputBar(
 
             Box(
                 modifier = Modifier
-                    .size(48.dp)
+                    .size(42.dp) // Reduced size
                     .clip(CircleShape)
                     .background(
                         if (inputText.isNotBlank() && !isLoading) {
@@ -457,6 +467,7 @@ fun ChatInputBar(
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.Send,
                     contentDescription = null,
+                    modifier = Modifier.size(20.dp), // Reduced icon size
                     tint = if (inputText.isNotBlank() && !isLoading) Color.White else MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
@@ -469,13 +480,13 @@ fun EmptyChatState(onPromptSelected: (String) -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(24.dp),
+            .padding(20.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
         Box(
             modifier = Modifier
-                .size(80.dp)
+                .size(64.dp)
                 .clip(CircleShape)
                 .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)),
             contentAlignment = Alignment.Center
@@ -484,27 +495,27 @@ fun EmptyChatState(onPromptSelected: (String) -> Unit) {
                 imageVector = Icons.Default.AutoAwesome,
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.size(40.dp)
+                modifier = Modifier.size(32.dp)
             )
         }
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(20.dp))
         Text(
             text = stringResource(R.string.ai_chat_empty_title),
-            style = MaterialTheme.typography.headlineSmall.copy(
+            style = MaterialTheme.typography.titleLarge.copy(
                 fontFamily = SoraFontFamily,
                 fontWeight = FontWeight.Bold
             ),
             textAlign = TextAlign.Center
         )
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(6.dp))
         Text(
             text = stringResource(R.string.ai_chat_empty_subtitle),
-            style = MaterialTheme.typography.bodyMedium,
+            style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             textAlign = TextAlign.Center,
-            modifier = Modifier.padding(horizontal = 16.dp)
+            modifier = Modifier.padding(horizontal = 12.dp)
         )
-        Spacer(modifier = Modifier.height(32.dp))
+        Spacer(modifier = Modifier.height(24.dp))
         
         val prompts = listOf(
             stringResource(R.string.ai_prompt_spending),
@@ -516,7 +527,7 @@ fun EmptyChatState(onPromptSelected: (String) -> Unit) {
         )
 
         LazyRow(
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            horizontalArrangement = Arrangement.spacedBy(6.dp),
             contentPadding = PaddingValues(horizontal = 4.dp)
         ) {
             items(prompts) { prompt ->
@@ -525,17 +536,13 @@ fun EmptyChatState(onPromptSelected: (String) -> Unit) {
                     label = { 
                         Text(
                             text = prompt,
-                            style = MaterialTheme.typography.labelMedium.copy(
+                            style = MaterialTheme.typography.labelSmall.copy(
                                 fontFamily = DmSansFontFamily
                             ),
                             maxLines = 1
                         ) 
                     },
-                    shape = RoundedCornerShape(20.dp),
-//                    border = SuggestionChipDefaults.suggestionChipBorder(
-//                        borderColor = MaterialTheme.colorScheme.outlineVariant
-//
-//                    )
+                    shape = RoundedCornerShape(16.dp),
                 )
             }
         }

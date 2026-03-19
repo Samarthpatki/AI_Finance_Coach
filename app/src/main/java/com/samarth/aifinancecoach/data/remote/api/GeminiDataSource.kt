@@ -1,17 +1,19 @@
 package com.samarth.aifinancecoach.data.remote.api
 
+import android.util.Log
 import com.google.ai.client.generativeai.GenerativeModel
 import com.google.ai.client.generativeai.type.BlockThreshold
 import com.google.ai.client.generativeai.type.HarmCategory
 import com.google.ai.client.generativeai.type.SafetySetting
-import com.google.ai.client.generativeai.type.content
 import com.google.ai.client.generativeai.type.generationConfig
 import com.samarth.aifinancecoach.domain.model.AiInsight
 import com.samarth.aifinancecoach.domain.model.AiMessage
 import com.samarth.aifinancecoach.domain.model.FinancialContext
-import com.samarth.aifinancecoach.domain.model.MessageRole
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.onStart
 import java.text.SimpleDateFormat
 import java.util.Locale
 import javax.inject.Inject
@@ -22,14 +24,16 @@ import javax.inject.Singleton
 class GeminiDataSource @Inject constructor(
     @Named("geminiApiKey") private val apiKey: String
 ) {
+    private val TAG = "GeminiDataSource"
+
     private val generativeModel = GenerativeModel(
-        modelName = "gemini-1.5-flash",
+        modelName = "gemini-2.5-flash",
         apiKey = apiKey,
         generationConfig = generationConfig {
             temperature = 0.7f
             topK = 40
             topP = 0.95f
-            maxOutputTokens = 1024
+            maxOutputTokens = 2048
         },
         safetySettings = listOf(
             SafetySetting(HarmCategory.HARASSMENT, BlockThreshold.MEDIUM_AND_ABOVE),
@@ -38,22 +42,24 @@ class GeminiDataSource @Inject constructor(
     )
 
     private val systemPrompt = """
-        You are an expert personal finance coach for Indian users.
+        You are "AI Coach", an expert personal finance coach for Indian users.
         You have access to the user's actual transaction data, budgets and spending patterns.
+        
+        Your Goal: Help users save more, spend wisely, and reach their financial goals.
+        
         Your personality:
-        - Warm, encouraging and non-judgmental
-        - Speak like a knowledgeable friend, not a formal advisor
-        - Use Indian context (₹, lakhs, EMIs, UPI etc)
-        - Be specific — always reference actual numbers from the data
-        - Keep responses concise — max 3-4 paragraphs
-        - Use bullet points for lists
-        - Add 1 actionable tip at the end of every response
+        - Warm, encouraging and non-judgmental.
+        - Speak like a knowledgeable friend (using terms like 'bro', 'buddy', or just friendly casual tone).
+        - Use Indian context exclusively (₹, lakhs, EMIs, UPI, SIPs, FD, Gold).
+        - Be highly specific — always reference actual numbers, dates, and category names from the provided context.
+        - Keep responses concise but high-value — max 3 short paragraphs.
+        - Use Markdown for formatting (bold for numbers, bullet points for lists).
+        - Always end with exactly 1 actionable "Coach's Tip" relevant to the conversation.
 
         You must NEVER:
-        - Give generic advice not based on the user's data
-        - Make up numbers not present in the context
-        - Be preachy or repetitive
-        - Suggest illegal or unethical financial activities.
+        - Give generic advice like "save 20%" unless it's backed by their actual data.
+        - Make up transactions or budgets that don't exist in the context.
+        - Mention you are an AI or a large language model.
     """.trimIndent()
 
     suspend fun sendMessage(
@@ -62,9 +68,21 @@ class GeminiDataSource @Inject constructor(
         context: FinancialContext
     ): Flow<String> = flow {
         val prompt = buildFullPrompt(userMessage, conversationHistory, context)
-        generativeModel.generateContentStream(prompt).collect { chunk ->
-            chunk.text?.let { emit(it) }
-        }
+        Log.d(TAG, "Sending prompt to Gemini: $prompt")
+        
+        generativeModel.generateContentStream(prompt)
+            .onStart { Log.d(TAG, "Gemini stream started") }
+            .catch { e -> 
+                Log.e(TAG, "Error in Gemini stream: ${e.message}", e)
+                throw e
+            }
+            .onCompletion { Log.d(TAG, "Gemini stream completed") }
+            .collect { chunk ->
+                chunk.text?.let { 
+                    Log.d(TAG, "Received chunk: $it")
+                    emit(it) 
+                }
+            }
     }
 
     private fun buildFullPrompt(
@@ -86,45 +104,42 @@ class GeminiDataSource @Inject constructor(
             $historyPrompt
             
             USER: $userMessage
-            ASSISTANT:
+            AI COACH:
         """.trimIndent()
     }
 
     private fun buildContextPrompt(context: FinancialContext): String {
-        val monthName = SimpleDateFormat("MMMM", Locale.getDefault())
-            .format(java.util.Calendar.getInstance().apply { set(java.util.Calendar.MONTH, context.currentMonth) }.time)
-            
         val topCategories = context.topSpendingCategories.joinToString("\n") { 
-            "- ${it.first.name}: ₹${it.second}" 
+            "- ${it.first.name}: ${context.currencySymbol}${it.second}" 
         }
         
         val recentTransactions = context.recentTransactions.joinToString("\n") {
             val date = SimpleDateFormat("dd MMM", Locale.getDefault()).format(it.dateMillis)
-            "- [$date] ${it.category.name} ${it.note}: ₹${it.amount} (${it.type})"
+            "- [$date] ${it.category.name}: ${context.currencySymbol}${it.amount} (${it.note})"
         }
         
         val budgets = context.budgets.joinToString("\n") {
             val percent = if (it.limitAmount > 0) (it.spentAmount / it.limitAmount * 100).toInt() else 0
-            "- ${it.category.name}: ₹${it.spentAmount} of ₹${it.limitAmount} ($percent% used)"
+            "- ${it.category.name}: Spent ${context.currencySymbol}${it.spentAmount} of ${context.currencySymbol}${it.limitAmount} ($percent%)"
         }
 
         return """
-            === FINANCIAL CONTEXT FOR ${context.userName} ===
-            Month: $monthName ${context.currentYear}
-            Monthly Income: ₹${context.monthlyIncome}
-            Monthly Expenses: ₹${context.monthlyExpense}
-            Net Savings: ₹${context.monthlyIncome - context.monthlyExpense}
+            === USER FINANCIAL DATA ===
+            User: ${context.userName}
+            Monthly Income: ${context.currencySymbol}${context.monthlyIncome}
+            This Month's Total Expenses: ${context.currencySymbol}${context.monthlyExpense}
+            Current Savings: ${context.currencySymbol}${context.monthlyIncome - context.monthlyExpense}
             Savings Rate: ${String.format("%.1f", context.savingsRate)}%
 
             TOP SPENDING CATEGORIES:
             $topCategories
 
-            RECENT TRANSACTIONS (last 30):
+            RECENT TRANSACTIONS:
             $recentTransactions
 
             ACTIVE BUDGETS:
             $budgets
-            === END CONTEXT ===
+            === END DATA ===
         """.trimIndent()
     }
 
@@ -132,29 +147,30 @@ class GeminiDataSource @Inject constructor(
         val prompt = """
             ${buildContextPrompt(context)}
             
-            Based on the financial data above, generate 3-5 personalized financial insights.
-            For each insight, provide:
-            1. A short title
-            2. A descriptive message
-            3. Type (one of: OVERSPENDING, SAVING_OPPORTUNITY, UNUSUAL_TRANSACTION, BUDGET_ALERT, MONTHLY_SUMMARY, POSITIVE_TREND)
-            
-            Return the response in a structured format that I can parse. 
+            As a finance coach, look at the data above and generate 3 personalized financial insights.
             Format each insight as:
-            [TITLE] Title here
-            [MESSAGE] Message here
-            [TYPE] Type here
+            [TITLE] <short title>
+            [MESSAGE] <1-2 sentence insight referencing specific data>
+            [TYPE] <OVERSPENDING | SAVING_OPPORTUNITY | UNUSUAL_TRANSACTION | BUDGET_ALERT | MONTHLY_SUMMARY | POSITIVE_TREND>
             ---
         """.trimIndent()
 
-        val response = generativeModel.generateContent(prompt)
-        return parseInsights(response.text ?: "")
+        Log.d(TAG, "Generating insights with prompt: $prompt")
+        return try {
+            val response = generativeModel.generateContent(prompt)
+            Log.d(TAG, "Insights response: ${response.text}")
+            parseInsights(response.text ?: "")
+        } catch (e: Exception) {
+            Log.e(TAG, "Error generating insights: ${e.message}", e)
+            emptyList()
+        }
     }
 
     private fun parseInsights(text: String): List<AiInsight> {
         val insights = mutableListOf<AiInsight>()
         val blocks = text.split("---")
         for (block in blocks) {
-            if (block.isBlank()) continue
+            if (block.isBlank() || !block.contains("[TITLE]")) continue
             val title = block.substringAfter("[TITLE]").substringBefore("\n").trim()
             val message = block.substringAfter("[MESSAGE]").substringBefore("\n").trim()
             val typeStr = block.substringAfter("[TYPE]").substringBefore("\n").trim()
@@ -183,18 +199,23 @@ class GeminiDataSource @Inject constructor(
         val prompt = """
             ${buildContextPrompt(context)}
             
-            Generate a comprehensive monthly financial report for ${context.userName} for ${context.currentMonth}/${context.currentYear}.
-            Include sections for:
-            - ## Financial Health Overview
-            - ## Key Spending Insights
-            - ## Budget Performance
-            - ## Actionable Recommendations
+            Generate a comprehensive monthly financial report for ${context.userName}.
+            Use the data to create these sections:
+            - ## Monthly Health Checkup (How did they do overall?)
+            - ## Where the money went (Highlight top categories)
+            - ## Budget Scorecard
+            - ## Coach's Game Plan (Specific actionable steps for next month)
             
-            Use markdown formatting (## for headers, - for bullets, ** for bold).
-            Be encouraging but honest about their spending habits.
+            Use markdown. Be supportive.
         """.trimIndent()
 
-        val response = generativeModel.generateContent(prompt)
-        return response.text ?: ""
+        Log.d(TAG, "Generating monthly report...")
+        return try {
+            val response = generativeModel.generateContent(prompt)
+            response.text ?: ""
+        } catch (e: Exception) {
+            Log.e(TAG, "Error generating monthly report: ${e.message}", e)
+            "Error generating report. Please try again later."
+        }
     }
 }

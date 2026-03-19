@@ -20,5 +20,5 @@ enum class TransactionType {
 }
 
 enum class AccountType {
-    CASH, UPI, BANK, CREDIT_CARD
+    CASH, UPI, BANK
 }

@@ -44,7 +44,6 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 val isLoggedIn = isUserLoggedInUseCase()
-                val onboardingSeen = userPreferencesDataStore.isOnboardingComplete()
                 val profileComplete = userPreferencesDataStore.isProfileSetupComplete()
 
                 _startDestination.value = when {
@@ -54,10 +53,7 @@ class MainViewModel @Inject constructor(
                     // Logged in but profile not set up yet
                     isLoggedIn && !profileComplete -> Screen.ProfileSetup.route
 
-                    // Onboarding already seen, not logged in → Login
-                    onboardingSeen -> Screen.Login.route
-
-                    // First time install → Onboarding
+                    // Not logged in → Always show Onboarding first
                     else -> Screen.Onboarding.route
                 }
             } catch (e: Exception) {

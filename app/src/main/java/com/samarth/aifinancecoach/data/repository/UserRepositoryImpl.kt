@@ -17,14 +17,22 @@ class UserRepositoryImpl @Inject constructor(
 
     override suspend fun saveUserProfile(profile: UserProfile) {
         userFirestore.saveUser(profile)
+        // Sync to local preferences too
+        dataStore.setUserName(profile.name)
+        dataStore.setCurrency(profile.currency)
+        dataStore.setMonthlyIncome(profile.monthlyIncome.toString())
+        dataStore.setProfileSetupComplete(profile.profileSetupComplete)
     }
 
     override fun getUserProfile(): Flow<UserProfile?> = flow {
-        // Implementation for getting user profile, e.g., from Firestore based on current user ID
-        // For simplicity, we could also use dataStore to get some info or just use firestore
+        // This would normally get the current user ID and fetch from Firestore
+        // For a flow, you might want to listen to Firestore snapshots
     }
 
     override suspend fun updateUserProfile(profile: UserProfile) {
         userFirestore.updateUser(profile)
+        dataStore.setUserName(profile.name)
+        dataStore.setCurrency(profile.currency)
+        dataStore.setMonthlyIncome(profile.monthlyIncome.toString())
     }
 }

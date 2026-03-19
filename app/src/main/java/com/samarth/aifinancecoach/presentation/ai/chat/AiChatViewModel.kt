@@ -1,5 +1,6 @@
 package com.samarth.aifinancecoach.presentation.ai.chat
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.samarth.aifinancecoach.domain.model.AiMessage
@@ -19,12 +20,14 @@ class AiChatViewModel @Inject constructor(
     private val clearChatHistoryUseCase: ClearChatHistoryUseCase
 ) : ViewModel() {
 
+    private val TAG = "AiChatViewModel"
     private val _state = MutableStateFlow(AiChatState())
     val state = _state.asStateFlow()
 
     init {
         viewModelScope.launch {
             getChatHistoryUseCase().collect { history ->
+                Log.d(TAG, "Chat history updated: ${history.size} messages")
                 _state.update { it.copy(messages = history) }
             }
         }
@@ -38,85 +41,54 @@ class AiChatViewModel @Inject constructor(
 
     fun onSendMessage() {
         val currentInput = _state.value.inputText
-        if (currentInput.isBlank() || _state.value.isLoading) return
+        if (currentInput.isBlank() || _state.value.isLoading) {
+            Log.d(TAG, "Cannot send message: input is blank or already loading")
+            return
+        }
 
-        val userMessage = AiMessage(
-            role = MessageRole.USER,
-            content = currentInput
-        )
+        Log.d(TAG, "User sending message: $currentInput")
 
-        // Optimistic update
-        val updatedMessages = _state.value.messages + userMessage
-        val assistantPlaceholder = AiMessage(
-            role = MessageRole.ASSISTANT,
-            content = "",
-            isLoading = true
-        )
+        // Grab current history BEFORE adding new messages for LLM context
+        val contextHistory = _state.value.messages.takeLast(10)
 
         _state.update {
             it.copy(
-                messages = updatedMessages + assistantPlaceholder,
                 inputText = "",
                 isLoading = true,
+                error = null,
                 streamingContent = ""
             )
         }
 
         viewModelScope.launch {
             try {
-                // Get last 10 messages for context
-                val history = updatedMessages.takeLast(10)
-                
                 var fullContent = ""
+                Log.d(TAG, "Invoking sendAiMessageUseCase")
                 sendAiMessageUseCase(
                     userMessage = currentInput,
-                    conversationHistory = history,
+                    conversationHistory = contextHistory,
                     month = _state.value.currentMonth,
                     year = _state.value.currentYear
-                ).collect { token ->
+                ).catch { e ->
+                    Log.e(TAG, "Error in sendAiMessageUseCase: ${e.message}", e)
+                    _state.update { it.copy(isLoading = false, error = e.message) }
+                }.collect { token ->
                     fullContent += token
-                    _state.update { state ->
-                        val newMessages = state.messages.toMutableList()
-                        val lastIdx = newMessages.lastIndex
-                        if (lastIdx >= 0 && newMessages[lastIdx].role == MessageRole.ASSISTANT) {
-                            newMessages[lastIdx] = newMessages[lastIdx].copy(
-                                content = fullContent,
-                                isLoading = true
-                            )
-                        }
-                        state.copy(
-                            messages = newMessages,
-                            streamingContent = fullContent
-                        )
-                    }
+                    Log.v(TAG, "Received token, full content length: ${fullContent.length}")
+                    _state.update { it.copy(streamingContent = fullContent) }
                 }
                 
-                // Finalize message
-                _state.update { state ->
-                    val newMessages = state.messages.toMutableList()
-                    val lastIdx = newMessages.lastIndex
-                    if (lastIdx >= 0 && newMessages[lastIdx].role == MessageRole.ASSISTANT) {
-                        newMessages[lastIdx] = newMessages[lastIdx].copy(isLoading = false)
-                    }
-                    state.copy(messages = newMessages, isLoading = false)
-                }
+                Log.d(TAG, "Message streaming finished successfully")
+                _state.update { it.copy(isLoading = false, streamingContent = "") }
             } catch (e: Exception) {
-                _state.update { state ->
-                    val newMessages = state.messages.toMutableList()
-                    val lastIdx = newMessages.lastIndex
-                    if (lastIdx >= 0 && newMessages[lastIdx].role == MessageRole.ASSISTANT) {
-                        newMessages[lastIdx] = newMessages[lastIdx].copy(
-                            isError = true,
-                            isLoading = false
-                        )
-                    }
-                    state.copy(messages = newMessages, isLoading = false)
-                }
+                Log.e(TAG, "Exception caught in onSendMessage: ${e.message}", e)
+                _state.update { it.copy(isLoading = false, error = e.message) }
             }
         }
     }
 
     fun onQuickPromptSelected(prompt: String) {
+        Log.d(TAG, "Quick prompt selected: $prompt")
         _state.update { it.copy(inputText = prompt) }
         onSendMessage()
     }
@@ -127,6 +99,7 @@ class AiChatViewModel @Inject constructor(
 
     fun onConfirmClear() {
         viewModelScope.launch {
+            Log.d(TAG, "Clearing chat history")
             clearChatHistoryUseCase()
             _state.update { it.copy(showClearDialog = false, messages = emptyList()) }
         }
@@ -139,8 +112,8 @@ class AiChatViewModel @Inject constructor(
     fun retryLastMessage() {
         val lastUserMessage = _state.value.messages.lastOrNull { it.role == MessageRole.USER }
         if (lastUserMessage != null) {
-            val cleanedMessages = _state.value.messages.filter { !it.isError }
-            _state.update { it.copy(messages = cleanedMessages, inputText = lastUserMessage.content) }
+            Log.d(TAG, "Retrying last user message: ${lastUserMessage.content}")
+            _state.update { it.copy(inputText = lastUserMessage.content) }
             onSendMessage()
         }
     }

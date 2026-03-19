@@ -183,7 +183,6 @@ fun TransactionDetailScreen(
                                 AccountType.CASH -> Icons.Rounded.Payments
                                 AccountType.UPI -> Icons.Rounded.Smartphone
                                 AccountType.BANK -> Icons.Rounded.AccountBalance
-                                AccountType.CREDIT_CARD -> Icons.Rounded.CreditCard
                             }
                         )
                         HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp), color = MaterialTheme.colorScheme.outline.copy(alpha = 0.1f))
