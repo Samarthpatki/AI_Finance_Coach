@@ -1,6 +1,8 @@
 package com.samarth.aifinancecoach.presentation.auth.onboarding
 
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -8,11 +10,18 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.TrendingUp
+import androidx.compose.material.icons.filled.AccountBalance
+import androidx.compose.material.icons.filled.Analytics
+import androidx.compose.material.icons.filled.TrendingUp
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -46,8 +55,16 @@ fun OnboardingScreen(
         }
     }
 
+    // Sync pager with state when state changes (e.g. Next button clicked)
     LaunchedEffect(state.currentPage) {
-        pagerState.animateScrollToPage(state.currentPage)
+        if (pagerState.currentPage != state.currentPage) {
+            pagerState.animateScrollToPage(state.currentPage)
+        }
+    }
+
+    // Sync state with pager when user swipes
+    LaunchedEffect(pagerState.currentPage) {
+        viewModel.onPageChanged(pagerState.currentPage)
     }
 
     Column(
@@ -76,7 +93,7 @@ fun OnboardingScreen(
             modifier = Modifier
                 .weight(1f)
                 .fillMaxWidth(),
-            userScrollEnabled = false
+            userScrollEnabled = true
         ) { pageIndex ->
             OnboardingPageContent(pageIndex)
         }
@@ -161,11 +178,49 @@ fun OnboardingPageContent(pageIndex: Int) {
         else -> stringResource(R.string.onboarding_page3_desc)
     }
 
-    val gradientOverlay = when (pageIndex) {
-        0 -> Brush.verticalGradient(listOf(Color(0xFF00C896).copy(alpha = 0.15f), Color(0xFF0096FF).copy(alpha = 0.15f)))
-        1 -> Brush.verticalGradient(listOf(Color(0xFF0096FF).copy(alpha = 0.15f), Color(0xFFFFB340).copy(alpha = 0.15f)))
-        else -> Brush.verticalGradient(listOf(Color(0xFFFFB340).copy(alpha = 0.15f), Color(0xFF00C896).copy(alpha = 0.15f)))
+//    val gradientOverlay = when (pageIndex) {
+//        0 -> Brush.verticalGradient(listOf(Color(0xFF00C896).copy(alpha = 0.15f), Color(0xFF0096FF).copy(alpha = 0.15f)))
+//        1 -> Brush.verticalGradient(listOf(Color(0xFF0096FF).copy(alpha = 0.15f), Color(0xFFFFB340).copy(alpha = 0.15f)))
+//        else -> Brush.verticalGradient(listOf(Color(0xFFFFB340).copy(alpha = 0.15f), Color(0xFF00C896).copy(alpha = 0.15f)))
+//    }
+
+
+
+    val (startColor, endColor) = when (pageIndex) {
+        0 -> Color(0xFF00C896) to Color(0xFF0096FF)
+        1 -> Color(0xFF0096FF) to Color(0xFFFFB340)
+        else -> Color(0xFFFFB340) to Color(0xFF00C896)
     }
+
+    val gradientOverlay = Brush.verticalGradient(
+        listOf(
+            startColor.copy(alpha = 0.15f),
+            endColor.copy(alpha = 0.15f)
+        )
+    )
+
+    val icon = when (pageIndex) {
+        0 -> Icons.Default.AccountBalance
+        1 -> Icons.Default.Analytics
+        else -> Icons.AutoMirrored.Filled.TrendingUp
+    }
+
+// 🎯 Dynamic UI colors
+    val surfaceColor = startColor.copy(alpha = 0.12f)
+    val iconTint = startColor
+
+// 🔥 Animation
+    val scale by animateFloatAsState(
+        targetValue = 1f,
+        animationSpec = tween(durationMillis = 500),
+        label = "scaleAnim"
+    )
+
+    val alpha by animateFloatAsState(
+        targetValue = 1f,
+        animationSpec = tween(durationMillis = 500),
+        label = "alphaAnim"
+    )
 
     Column(
         modifier = Modifier.fillMaxSize()
@@ -179,12 +234,23 @@ fun OnboardingPageContent(pageIndex: Int) {
         ) {
             // Placeholder for illustration
             Surface(
-                modifier = Modifier.size(120.dp),
-                color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
-                shape = RoundedCornerShape(24.dp)
+                modifier = Modifier.size(120.dp) .scale(scale)
+                    .alpha(alpha),
+//                color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
+                color = surfaceColor,
+                shape = RoundedCornerShape(24.dp),
+                tonalElevation = 6.dp
+
             ) {
                  // Icon could go here
-            }
+                Icon(
+                    imageVector = icon,
+                    contentDescription = "Page Icon",
+                    tint =iconTint,
+//                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.size(48.dp)
+                )
+             }
         }
 
         Spacer(modifier = Modifier.height(32.dp))

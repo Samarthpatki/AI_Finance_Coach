@@ -25,6 +25,10 @@ class OnboardingViewModel @Inject constructor(
     private val _navigationEvent = MutableSharedFlow<String>()
     val navigationEvent = _navigationEvent.asSharedFlow()
 
+    fun onPageChanged(page: Int) {
+        _state.update { it.copy(currentPage = page) }
+    }
+
     fun nextPage() {
         if (_state.value.currentPage < _state.value.totalPages - 1) {
             _state.update { it.copy(currentPage = it.currentPage + 1) }
