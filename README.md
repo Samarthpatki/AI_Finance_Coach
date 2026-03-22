@@ -16,7 +16,7 @@ style="border-radius: 22px"/>
 ![Jetpack Compose](https://img.shields.io/badge/Jetpack%20Compose-4285F4?style=for-the-badge&logo=jetpackcompose&logoColor=white)
 ![Gemini AI](https://img.shields.io/badge/Gemini%20AI-8E75B2?style=for-the-badge&logo=google&logoColor=white)
 ![Firebase](https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)
-![License](https://img.shields.io/badge/License-MIT-00C896?style=for-the-badge)
+
 
 [Download APK](#download) ·
 [Screenshots](#screenshots) ·
